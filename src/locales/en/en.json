@@ -1,0 +1,69 @@
+{
+  "loading": "Loading...",
+  "view": "View",
+  "edit": "Edit",
+  "delete": "Delete",
+  "ui": {
+    "name": "Name",
+    "surname": "Surname",
+    "patronymic": "Patronymic",
+    "female_surname": "Maiden name",
+    "email": "Email",
+    "phone": "Phone",
+    "gender": "Gender",
+    "birthday": "Birthday",
+    "password": {
+      "change": "Change password",
+      "old": "Old password",
+      "new": "New password",
+      "confirm": "Confirm password"
+    },
+    "save": "Save",
+    "edit": "Edit",
+    "add": "Add",
+    "go_back": "Go back",
+    "verification": {
+      "verification": "Verify",
+      "title": "Email Verification",
+      "text": "Your email address was confirmed. Now you can return to your cabinet",
+      "link": "Move to profile page"
+    },
+  "profile": {
+    "title": "Cabinet",
+    "sign_in_with": "Sign in with"
+  },
+  "layout": {
+    "cabinet_link": "Cabinet",
+    "tree_link": "Family tree",
+    "search_link": "Search",
+    "statistics_link": "Statistics",
+    "share_link": "Share",
+    "exit": "Exit",
+    "faq": "FAQ",
+    "chats": "Chats"
+  },
+    "photos": {
+      "new": "New photo",
+      "add": "Add a photo",
+      "edit": "Edit the photo",
+      "delete": "Delete photo",
+      "view": "View photos",
+      "name": "Photo",
+      "persons": "Persons",
+      "number_of_persons": "Number of persons",
+      "persons_search": "Persons search",
+      "no_persons": "No person added",
+      "no_photos": "There are no photos, you need to add ones"
+    },
+    "sure": "Are you sure you want to delete the { name } ?",
+    "last_update": "Last update",
+    "actions": "Actions"
+  },
+  "not_found": {
+    "thought": "Page is not found",
+    "not_found": "The page can't be found...",
+    "take_back": "But we can take you to home :)",
+    "link": "Return!",
+    "tree_not_found": "Tree not found :("
+  },
+}

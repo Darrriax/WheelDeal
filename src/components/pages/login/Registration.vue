@@ -114,7 +114,7 @@ import ButtonWhite from "../../UI/Buttons/ButtonWhite.vue";
 import errorShow from "../../../mixins/errorShow";
 import {GENDERS} from "../../../utils/enums";
 import SelectField from "../../../components/UI/Fields/SelectField.vue";
-import DateField from "../../../components/UI/Fields/DateField.vue";
+import DateField from "../../UI/Fields/NumberField.vue";
 import AuthLayout from "../../UI/ComponentLayouts/AuthLayout.vue";
 import Logo from "@/components/UI/main/Logo.vue";
 

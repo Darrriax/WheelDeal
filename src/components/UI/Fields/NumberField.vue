@@ -2,17 +2,15 @@
   <div class="input_group form-floating">
     <input
         class="form-control"
-        :type="type"
+        type="text"
         :class="classes"
         :id="id"
         :value="modelValue"
         :placeholder="placeholder"
         :disabled="disabled"
-        :min="min"
-        :max="max"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="validateInput($event)"
         @change="$emit('change', $event.target.value)"
-        @keydown.enter="submitValue"
+        @keydown.enter="submitValue($event, $event.target.value)"
     />
     <label
         class="form-label label_text"
@@ -32,22 +30,33 @@
 export default {
   props: {
     id: {type: String, required: false},
-    modelValue: {type: String, required: false},
-    type: {type: String, required: false},
-    min: {type: [String, Number], required: false},
-    max: {type: [String, Number], required: false},
+    modelValue: {type: [String, Number], required: false},
     classes: {required: false},
     placeholder: {type: String, required: false},
-    name: {type: String, default: ''},
     label: {type: String, required: true},
     disabled: {type: Boolean, default: false},
     error: {type: String, default: ''},
   },
   methods: {
+    validateInput(event) {
+      // Забрати всі символи, які не є цифрами
+      let value = event.target.value.replace(/\D/g, '');
+
+      // Перевірити, чи значення не менше нуля
+      if (value < 0) {
+        value = '0';
+      }
+
+      // Оновити значення в полі
+      event.target.value = value;
+
+      // Передати оновлене значення через модель
+      this.$emit('update:modelValue', value);
+    },
     submitValue(event, value) {
       this.$emit('submit', event);
       this.$emit('update:modelValue', value);
     },
-  }
-}
+  },
+};
 </script>

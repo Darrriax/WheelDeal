@@ -43,7 +43,7 @@
 import {DATES} from "../../../utils/enums";
 import Toggle from "./Toggle.vue";
 import CustomToggle from "./CustomToggle.vue";
-import DateField from "./DateField.vue";
+import DateField from "./NumberField.vue";
 import SelectField from "./SelectField.vue";
 import TextField from "./TextField.vue";
 import {mapActions, mapState} from "vuex";

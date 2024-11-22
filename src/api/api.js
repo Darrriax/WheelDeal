@@ -15,23 +15,15 @@ const urls = {
         login: 'api/login/',
         logout: 'api/logout/',
         register: 'api/register/',
-        notification: 'api/email/verification-notification/',
-        csrfToken: 'sanctum/csrf-cookie/',
-        forgotPassword: 'api/forgot-password/',
-        resetPassword: 'api/reset-password/',
     },
     account: {
         profile: 'api/account/profile/',
         update: 'api/account/update/',
-        password: 'api/account/password/',
-        avatar: 'api/account/avatar/',
-        cars: 'api/account/cars/',
     },
-    users: {
-
-    },
-    cars: {
+    car: {
         cars: 'api/cars/',
+        show: 'api/car/',
+        create: 'api/car/create',
     },
     photo: {
         photos: 'api/photos/',
@@ -77,100 +69,112 @@ FormDataApiInstance.interceptors.request.use(function (config) {
 });
 
 export const AuthApi = {
-    sanctum() {
-        const url = urls.auth.csrfToken;
-        return DefaultApiInstance.get(url);
-    },
-    register(name, surname, email, phone, gender, birthday, password, password_confirmation) {
+    // Вказуємо всю необхідну інформацію, щоб зареєструватися і мати доступ до системи
+    register(name, surname, father_name, password, email, phone_number, age, gender, additional_info) {
         const url = urls.auth.register;
-        const data = {name, surname, email, phone, gender, birthday, password, password_confirmation};
+        const data = {name, surname, father_name, password, email, phone_number, age, gender, additional_info};
         return DefaultApiInstance.post(url, data);
     },
+    // Після реєстрації можемо залогінитися на допомогою імейлу та паролю
     login(email, password) {
         const url = urls.auth.login;
         const data = {email, password};
         return DefaultApiInstance.post(url, data);
     },
+    // Вийти з системи
     logout() {
         const url = urls.auth.logout;
         return DefaultApiInstance.post(url);
     },
-    notify() {
-        const url = urls.auth.notification;
-        return DefaultApiInstance.post(url)
-    },
-    forgotPassword(email) {
-        const url = urls.auth.forgotPassword;
-        const data = {email};
-        return DefaultApiInstance.post(url, data);
-    },
-    resetPassword(reset_token, email, password, password_confirmation) {
-        const url = urls.auth.resetPassword;
-        const data = {token: reset_token, email, password, password_confirmation};
-        return DefaultApiInstance.post(url, data);
-    },
 };
 
 export const AccountApi = {
+    // Отримуємо дані акаунту (name, surname, father_name, password, email, phone_number, age, gender,
+    // additional_info), а також дані про усі автівки цього продавця display_name, seller_id, car_type,
+    // price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage,
+    // technical_condition)
     getAccountData() {
         const url = urls.account.profile;
         return DefaultApiInstance.get(url);
     },
-    updateAvatar(avatar) {
-        const url = urls.account.avatar;
-        return FormDataApiInstance.post(url, avatar);
-    },
-    loadFiles(files) {
-        const url = urls.account.files;
-        return FormDataApiInstance.post(url, files);
-    },
-    updateData(name, surname, patronymic, email, phone, gender, birthday) {
+    // Тут оновлюємо суто дані користувача, якщо він щось не так ввів
+    updateData(name, surname, father_name, email, password, phone_number, age, gender, additional_info) {
         const url = urls.account.update;
-        const data = {name, surname, patronymic, email, phone, gender, birthday};
-        return DefaultApiInstance.put(url, data);
-    },
-    updatePassword(current_password, password, password_confirmation) {
-        const url = urls.account.password;
-        const data = {current_password, password, password_confirmation};
-        return DefaultApiInstance.put(url, data);
+        const data = {name, surname, father_name, email, password, phone_number, age, gender, additional_info};
+        return FormDataApiInstance.post(url, data);
     },
 };
 
-export const UserApi = {
-    getUser(id) {
-        const url = urls.users.user + id;
+export const CarApi = {
+    // Отримуємо всі автомобілі, які є у системі
+    cars() {
+        const url = urls.car.cars;
         return DefaultApiInstance.get(url);
     },
-    searchUser({text, page, gender, car_id}) {
-        const query = buildQueryParams({text, page, gender, car_id});
-        const url = query ? `${urls.users.user}?${query}` : urls.users.user;
+    // Отримуємо дані авто display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency,
+    // was_in_accident, is_trade, is_available, mileage, technical_condition по його ID
+    getCarDataById(car_id) {
+        const url = urls.car.show + car_id;
         return DefaultApiInstance.get(url);
     },
-    liveSearchUsers({search, gender, car_id}) {
-        const query = buildQueryParams({search, gender, car_id});
-        const url = query ? `${urls.users.usersLiveSearch}?${query}` : urls.users.usersLiveSearch;
+    // Створюємо авто
+    createCar(display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition) {
+        const url = urls.car.create;
+        const data = {
+            display_name,
+            seller_id,
+            car_type,
+            price,
+            manufacturer,
+            is_trade,
+            is_available,
+            mileage,
+            technical_condition
+        };
+        return DefaultApiInstance.post(url, data);
+    },
+    // Видаляємо авто по його ID
+    removeCar(car_id) {
+        const url = urls.car.show + car_id;
+        return DefaultApiInstance.delete(url);
+    },
+    // Для редагування даних про автомобіль
+    carForEditById(car_id) {
+        const url = urls.car.show + car_id + '/edit';
         return DefaultApiInstance.get(url);
     },
-};
-
-export const CarApi = {}
+    // Для оновлення даних про авто
+    updateCarData(display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition) {
+        const url = urls.car.show;
+        const data = {
+            display_name,
+            seller_id,
+            car_type,
+            price,
+            manufacturer,
+            is_trade,
+            is_available,
+            mileage,
+            technical_condition
+        };
+        return FormDataApiInstance.post(url, data);
+    },
+}
 
 export const PhotosApi = {
-    getPhoto(id) {
-        const url = urls.photo.photos + id;
+    // Отримуємо всі завантажені фото автомобіля по його ID, при цьому те фото, що має тег is_main буде головним
+    getCarPhotos(car_id) {
+        const url = urls.photo.photos + car_id;
         return DefaultApiInstance.get(url);
     },
-    createPhoto(formData) {
-        const url = urls.photo.photos;
+    // Завантаження фотографій
+    createPhoto(car_id, formData) {
+        const url = urls.photo.photos + car_id;
         return FormDataApiInstance.post(url, formData);
     },
-    updatePhoto(id, name, date, users, description) {
-        const url = urls.photo.photos + id;
-        const data = {name, date, users, description};
-        return DefaultApiInstance.put(url, data);
-    },
-    deletePhoto(id) {
-        const url = urls.photo.photos + id;
+    // Видалення фотографій
+    deletePhoto(car_id, photo_id) {
+        const url = urls.photo.photos + car_id + photo_id;
         return DefaultApiInstance.delete(url);
     },
 };

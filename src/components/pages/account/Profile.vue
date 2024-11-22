@@ -2,7 +2,6 @@
   <layout>
     <div class="px-3 col-12" id="profile" :key="componentKey">
       <div class="row">
-        <invitation-card/>
         <div class="white_card no-border-right justify-content-center col-md-12 col-lg-12 col-xl-3">
           <div class="avatar p-t-20">
             <div>
@@ -27,78 +26,60 @@
           <form class="mx-0 row row-cols-md-2 row-cols-sm-1" @submit.prevent="updateUser($event)">
             <div>
               <text-field
-                  :label="$t('ui.name')"
+                  :label="$t('profile.name')"
                   v-model="user.name"
                   :error="error['name']"
               />
               <text-field
-                  :label="$t('ui.surname')"
+                  :label="$t('profile.surname')"
                   v-model="user.surname"
                   :error="error['surname']"
               />
               <text-field
-                  :label="$t('ui.patronymic')"
-                  v-model="user.patronymic"
-              />
-              <select-field
-                  v-model="user.gender"
-                  :value="user.gender"
-                  :options="genders"
-                  :label="$t('ui.gender')"
-                  :error="error['gender']"
+                  :label="$t('profile.patronymic')"
+                  v-model="user.father_name"
               />
             </div>
             <div>
               <div class="w100">
-                <div class="p-0 position-relative">
-                  <div class="verify" @click="notifyVerification" v-if="!isEmailVerified">
-                    <font-awesome-icon icon="fa-solid fa-circle-exclamation"/>
-                    <span class="m-l-5">{{ $t('ui.verification.verification') }}</span>
-                  </div>
-                  <text-field
-                      :label="$t('ui.email')"
-                      v-model="user.email"
-                      :error="error['email']"
-                  />
-                </div>
-                <phone-field
-                    :label="$t('ui.phone')"
-                    v-model="user.phone"
-                    :error="error['phone']"
-                />
-                <date-field
-                    :label="$t('ui.birthday')"
+                <number-field
+                    :label="$t('profile.age')"
                     v-model="user.birthday"
                     type="date"
                     :max="max"
                     :error="error['birthday']"
                 />
-                <button-blue
-                    classes="mb-2 w100 m-t-15"
-                    :label="$t('ui.save')"
-                    type="submit"
+                <select-field
+                    v-model="user.gender"
+                    :value="user.gender"
+                    :options="genders"
+                    :label="$t('profile.gender')"
+                    :error="error['gender']"
+                />
+                <password-field
+                    :label="$t('profile.password')"
+                    v-model="user.password"
+                    :error="error['current_password']"
                 />
               </div>
             </div>
           </form>
         </div>
         <div class="white_card no-border-left col-md-12 col-lg-4 col-xl-3">
-          <h5 class="py-3 text-center">{{ $t('ui.password.change') }}</h5>
+          <h5 class="py-3 text-center">{{ $t('profile.connect') }}</h5>
           <form class="row password_change p-0" @submit.prevent="changePassword($event)">
             <div>
-              <password-field
-                  :label="$t('ui.password.old')"
-                  v-model="current_password"
-                  :error="error['current_password']"
-              />
-              <password-field
-                  :label="$t('ui.password.new')"
-                  v-model="password"
-                  :error="error['password']"
-              />
-              <password-field
-                  :label="$t('ui.password.confirm')"
-                  v-model="password_confirmation"
+              <div class="p-0 position-relative">
+                <text-field
+                    :label="$t('profile.email')"
+                    v-model="user.email"
+                    :error="error['email']"
+                />
+              </div>
+              <phone-field
+                  :label="$t('profile.phone')"
+                  v-model="user.phone_number"
+                  :error="error['phone']"
               />
               <button-white
                   classes="mb-2 w100 m-t-15"
@@ -127,7 +108,7 @@ import ButtonWhite from "../../UI/Buttons/ButtonWhite.vue";
 import ButtonDefault from "../../UI/Buttons/ButtonDefault.vue";
 import TextField from "../../UI/Fields/TextField.vue";
 import SelectField from "../../UI/Fields/SelectField.vue";
-import DateField from "../../UI/Fields/DateField.vue";
+import NumberField from "../../UI/Fields/NumberField.vue";
 import PhoneField from "../../UI/Fields/PhoneField.vue";
 import PasswordField from "../../UI/Fields/PasswordField.vue";
 import ButtonAvatar from "../../UI/Buttons/ButtonAvatar.vue";
@@ -151,7 +132,7 @@ export default {
     ButtonDefault,
     TextField,
     SelectField,
-    DateField,
+    NumberField,
     PhoneField,
     PasswordField,
   },

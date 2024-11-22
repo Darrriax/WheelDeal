@@ -3,31 +3,46 @@
     <div class="container">
       <div class="collapse navbar-collapse gap-2" id="nav">
         <div class="notification_warp displayFlex justify-content-end gap-3">
-          <a href="#" id="navbar_notification" class="icons_params" role="button">
-            <font-awesome-icon icon="fa-solid fa-bell" class="fa-bell"/>
-          </a>
-          <animated-theme-toggle v-model="selectedTheme"/>
+          <animated-theme-toggle v-model="selectedTheme" class="my-1"/>
+          <div class="dropdown desktop ">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+              {{ selectedLanguage }}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+              <li v-for="language in supportedLanguages"
+                  :key="language.code">
+                <a class="dropdown-item"
+                   href="#"
+                   @click="switchLanguage(language.code)">
+                  {{ language.name }}
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="vr mx-1"></div>
-        <div class="name_and_surname">
-          <span id="name_and_surname"
+        <div class="ms-auto d-flex align-items-center gap-3">
+
+          <div class="name_and_surname">
+            <span
+                id="name_and_surname"
                 class="cursorPointer"
-                @click="goToProfile">
-            {{ surname + ' ' + name }}
-          </span>
-        </div>
-        <div class="avatar">
-          <img @click="goToProfile"
-               class="navbar_avatar cursorPointer"
-               :src="getAvatarUrl"
-               alt=""
+                @click="goToProfile"
+            >
+              {{ surname + ' ' + name }}
+            </span>
+          </div>
+
+          <div class="vr mx-1"></div>
+
+          <button
+              type="submit"
+              class="btn btn-secondary rounded-pill"
+              @click="logoutBtn"
           >
+            {{ $t('ui.exit') }}
+          </button>
         </div>
-        <button type="submit"
-                class="px-3 btn btn-secondary rounded-pill desktop"
-                @click="logoutBtn">
-          {{ $t('layout.exit') }}
-        </button>
       </div>
     </div>
   </nav>
@@ -37,6 +52,7 @@
 import {mapActions, mapGetters, mapState} from "vuex";
 import router from "../../../router";
 import setTheme from "../../../mixins/setTheme";
+import setLang from "../../../mixins/setLang";
 import AnimatedThemeToggle from "../../../components/UI/Fields/AnimatedThemeToggle.vue";
 
 export default {
@@ -50,6 +66,10 @@ export default {
       themes: [
         {code: 'dark', name: 'Dark Theme'},
         {code: 'light', name: 'Light Theme'},
+      ],
+      supportedLanguages: [
+        {code: 'en', name: 'English'},
+        {code: 'ua', name: 'Ukrainian'},
       ],
     }
   },
@@ -67,6 +87,7 @@ export default {
   },
   mixins: [
     setTheme,
+    setLang
   ],
   methods: {
     ...mapActions('auth', {

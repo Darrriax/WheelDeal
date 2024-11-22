@@ -56,7 +56,7 @@ export const TYPES = [
     },
 ];
 
-export const BRANDS = [
+export const MANUFACTURERS = [
     {
         id: '0',
         name: 'BMW',
@@ -75,42 +75,65 @@ export const BRANDS = [
     },
 ]
 
-export const MODELS = [
+export const CONDITIONS = [
     {
         id: '0',
-        name: 'M3',
+        name: 'New',
     },
     {
         id: '1',
-        name: 'CDI 319',
+        name: 'Run and drive',
     },
     {
         id: '2',
-        name: 'Supra',
+        name: 'Need repair',
     },
     {
         id: '3',
-        name: 'TT',
+        name: 'Not running',
     },
 ]
 
-export const REGIONS = [
+export const MILEAGE = [
     {
         id: '0',
-        name: 'Kyiv',
+        name: '0-10000',
     },
     {
         id: '1',
-        name: 'Vinnytsa',
+        name: '10000-50000',
     },
     {
         id: '2',
-        name: 'Dnipro',
+        name: '50000-100000',
     },
     {
         id: '3',
-        name: 'Ternopil',
+        name: '100000-200000',
     },
+    {
+        id: '4',
+        name: '200000-500000',
+    },
+    {
+        id: '5',
+        name: '500000+',
+    }
+]
+
+export const CURRENCIES = [
+    {
+        id: '0',
+        name: 'UAH',
+    },
+    {
+        id: '1',
+        name: 'USD',
+    },
+    {
+        id: '2',
+        name: 'EUR',
+    }
 ]
 
 export const DATES = [

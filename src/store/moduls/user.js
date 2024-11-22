@@ -12,24 +12,19 @@ export const user = {
         avatarUrl: userAvatar,
         user: {
             id: userData.id || undefined,
-            role: userData.role || undefined,
             name: userData.name || undefined,
             surname: userData.surname || undefined,
-            patronymic: userData.patronymic || undefined,
+            father_name: userData.father_name || undefined,
             email: userData.email || undefined,
-            phone: userData.phone || undefined,
+            password: userData.password || undefined,
+            phone_number: userData.phone_number || undefined,
+            age: userData.age || undefined,
             gender: userData.gender,
-            birthday: userData.birthday || undefined,
-            email_verified_at: userData.email_verified_at || undefined,
-            created_at: userData.created_at || undefined,
-            updated_at: userData.updated_at || undefined,
-            deleted_at: userData.deleted_at || undefined,
-            invitations: userData.invitations || undefined,
+            additional_info: userData.additional_info || undefined,
         }
     },
     getters: {
         isLoggedIn: state => state.user.id !== undefined,
-        isEmailVerified: state => state.user.email_verified_at !== undefined && state.user.email_verified_at !== null,
         getAvatarUrl: (state) => (state.avatarUrl === DEFAULT_PROFILE_IMG || state.avatarUrl === DEFAULT_PROFILE_WOMAN_IMG)
             ? ((state.user.gender === "F") ? DEFAULT_PROFILE_WOMAN_IMG : DEFAULT_PROFILE_IMG) : state.avatarUrl,
         getUserEmail: (state) => state.user.email,
@@ -53,9 +48,6 @@ export const user = {
                 localStorage.removeItem('avatar');
             }
         },
-        setInvitationsData(state, invitations) {
-            state.user.invitations = invitations;
-        },
     },
     actions: {
         setUser({commit}, user) {
@@ -67,21 +59,10 @@ export const user = {
         setInvitations({commit}, invite) {
             commit('user/setInvitationsData', invite, {root: true});
         },
-        async onLoadFiles({commit}, formData) {
-            AccountApi
-                .loadFiles(formData)
-                .then(async (res) => {
-                })
-                .catch(async (err) => {
-                    await this.dispatch('reports/showErrors', err);
-                })
-        },
         async onGetUser() {
             await this.dispatch('loading/setLoading', true);
             AccountApi.getAccountData()
                 .then(async (res) => {
-                    localStorage.setItem('trees', JSON.stringify(res.data.trees));
-                    await this.dispatch('user/setInvitations', res.data.invitations);
                     await this.dispatch('user/setUser', res.data);
                 })
                 .catch(async (err) => {
@@ -91,10 +72,10 @@ export const user = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onUpdateUser({commit}, {name, surname, patronymic, email, phone, gender, birthday}) {
+        async onUpdateUser({commit}, {name, surname, father_name, email, password, phone_number, age, gender, additional_info}) {
             await this.dispatch('loading/setLoading', true);
             AccountApi
-                .updateData(name, surname, patronymic, email, phone, gender, birthday)
+                .updateData(name, surname, father_name, email, password, phone_number, age, gender, additional_info)
                 .then(async (res) => {
                     await this.dispatch('user/setUser', res.data.data);
                     await this.dispatch('reports/showSuccess', res);
@@ -106,37 +87,8 @@ export const user = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onUpdatePassword({commit}, {current_password, password, password_confirmation}) {
-            await this.dispatch('loading/setLoading', true);
-            AccountApi
-                .updatePassword(current_password, password, password_confirmation)
-                .then(async (res) => {
-                    await this.dispatch('reports/showSuccess', res);
-                })
-                .catch(async (err) => {
-                    await this.dispatch('reports/showErrors', err);
-                })
-                .finally(async () => {
-                    await this.dispatch('loading/setLoading', false);
-                });
-        },
-        async onUpdateAvatar({commit}, formData) {
-            await this.dispatch('loading/setLoading', true);
-            AccountApi
-                .updateAvatar(formData)
-                .then(async (res) => {
-                    await this.dispatch('user/setAvatar', res.data.data.url);
-                    await this.dispatch('reports/showSuccess', res);
-                })
-                .catch(async (err) => {
-                    await this.dispatch('reports/showErrors', err);
-                })
-                .finally(async () => {
-                    await this.dispatch('loading/setLoading', false);
-                });
-        },
         async onUpdateDefaultAvatar({commit}, gender) {
-            if (gender.gender === 'F') {
+            if (gender.gender === 'Female') {
                 await this.dispatch('user/setAvatar', DEFAULT_PROFILE_WOMAN_IMG);
             } else {
                 await this.dispatch('user/setAvatar', DEFAULT_PROFILE_IMG);

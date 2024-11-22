@@ -2,7 +2,6 @@
   <layout>
     <div class="text-center d-flex justify-content-center flex-column align-items-center h-75">
       <h1>404 :( </h1>
-      ggg
       <h4>{{ $t('not_found.thought') }}</h4>
       <div class="not-found_paragraph p-t-20 p-b-20">
         <h6>{{ $t('not_found.not_found') }}</h6>

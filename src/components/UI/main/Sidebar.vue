@@ -6,50 +6,54 @@
         @submit.prevent="submit($event)"
     >
       <!--      <h6 class="mt-3">Реєстрація особистого кабінету</h6>-->
-      <div class="row g-2 py-md-2">
-        <div class="col-md">
+      <div class="row g-2">
+        <div class="col-md col-6">
           <select-field
               :options="types"
               :label="$t('car.type')"
           />
         </div>
-        <div class="col-md">
+        <div class="col-md col-6">
           <select-field
-              :options="brands"
-              :label="$t('car.brand')"
+              :options="manufacturers"
+              :label="$t('car.manufacturer')"
           />
         </div>
       </div>
-      <div class="row g-2 py-md-2 py-sm-2">
-        <div class="col-md">
+      <div class="row g-2">
+        <div class="col-md col-6">
           <select-field
-              :options="models"
-              :label="$t('car.model')"
+              :options="technical_conditions"
+              :label="$t('car.technical_condition')"
           />
         </div>
-        <div class="col-md">
+        <div class="col-md col-6">
           <select-field
-              :options="regions"
-              :label="$t('car.region')"
+              :options="mileage"
+              :label="$t('car.mileage')"
           />
         </div>
       </div>
-      <div class="row g-2 py-md-2">
-        <div class="col-md">
-          <date-field
-              label="Рік випуску"
-              type="date"
+      <div class="row g-2">
+        <div class="col-8">
+          <number-field
+              :label="$t('car.price')"
           />
         </div>
-        <div class="col-md">
-          <text-field
-              label="Ціна"
+        <div class="col-4">
+          <select-field
+              :options="currencies"
+              :label="$t('car.currency')"
           />
         </div>
+      </div>
+      <div class="row g-2">
+        <toggle :label="$t('car.accident')"/>
+        <toggle :label="$t('car.trade')"/>
       </div>
       <div class="d-flex flex-column align-items-center">
-        <button-white
-            classes="btn btn-outline-primary mt-3 mb-2 max-w-200 w100"
+        <button-blue
+            classes="btn btn-outline mt-3 mb-2 max-w-200 w100"
             label="Пошук"
             type="submit"
         />
@@ -63,18 +67,22 @@
 
 import Logo from "@/components/UI/main/Logo.vue";
 import SelectField from "@/components/UI/Fields/SelectField.vue";
-import {BRANDS, MODELS, REGIONS, TYPES} from "@/utils/enums.js";
+import {CONDITIONS, CURRENCIES, MANUFACTURERS, MILEAGE, TYPES} from "@/utils/enums.js";
 import PasswordField from "@/components/UI/Fields/PasswordField.vue";
 import PhoneField from "@/components/UI/Fields/PhoneField.vue";
-import DateField from "@/components/UI/Fields/DateField.vue";
-import ButtonWhite from "@/components/UI/Buttons/ButtonWhite.vue";
+import DateField from "@/components/UI/Fields/NumberField.vue";
 import TextField from "@/components/UI/Fields/TextField.vue";
+import ButtonBlue from "@/components/UI/Buttons/ButtonBlue.vue";
+import Toggle from "@/components/UI/Fields/Toggle.vue";
+import NumberField from "@/components/UI/Fields/NumberField.vue";
 
 export default {
   name: "Sidebar",
   components: {
+    Toggle,
+    NumberField,
     TextField,
-    ButtonWhite,
+    ButtonBlue,
     DateField,
     PhoneField,
     PasswordField,
@@ -85,15 +93,18 @@ export default {
     types() {
       return TYPES;
     },
-    brands() {
-      return BRANDS;
+    manufacturers() {
+      return MANUFACTURERS;
     },
-    models() {
-      return MODELS;
+    technical_conditions() {
+      return CONDITIONS;
     },
-    regions() {
-      return REGIONS;
+    mileage() {
+      return MILEAGE;
     },
+    currencies() {
+      return CURRENCIES;
+    }
   },
   data() {
     return {};

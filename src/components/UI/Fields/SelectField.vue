@@ -43,7 +43,7 @@ export default {
     reduceLabel: {type: String, default: 'name'},
     reduceKey: {type: String, default: 'id'},
     id: {type: String, required: false},
-    placeholder: {type: String, default: 'Нічого не вибрано'},
+    placeholder: {type: String, default: 'Select...'},
     error: {type: String, default: ''},
   },
   components: {

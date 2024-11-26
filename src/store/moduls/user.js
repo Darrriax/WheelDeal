@@ -1,9 +1,8 @@
 import {AccountApi} from "../../api/api";
 import {DEFAULT_PROFILE_IMG, DEFAULT_PROFILE_WOMAN_IMG} from "../../utils/constants";
-import {encryptData, decryptData} from '../../utils/encryption';
 
-const userData = decryptData(localStorage.getItem('user')) || {};
-const userAvatar = decryptData(localStorage.getItem('avatar')) || DEFAULT_PROFILE_IMG;
+const userData = localStorage.getItem('user') || {};
+const userAvatar = localStorage.getItem('avatar') || DEFAULT_PROFILE_IMG;
 
 export const user = {
     namespaced: true,
@@ -37,13 +36,13 @@ export const user = {
                 localStorage.removeItem('user');
             } else {
                 state.user = user;
-                localStorage.setItem('user', encryptData(user));
+                localStorage.setItem('user', use);
             }
         },
         setAvatarUrl(state, url) {
             state.avatarUrl = url;
             if (url) {
-                localStorage.setItem('avatar', encryptData(url));
+                localStorage.setItem('avatar', url);
             } else {
                 localStorage.removeItem('avatar');
             }

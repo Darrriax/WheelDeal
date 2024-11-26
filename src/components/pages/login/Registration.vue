@@ -8,7 +8,7 @@
       >
         <logo/>
         <h6 class="mt-3">Реєстрація особистого кабінету</h6>
-        <div class="row g-2 py-md-2">
+        <div class="row g-2">
           <div class="col-md">
             <text-field
                 id="name"
@@ -25,8 +25,16 @@
                 :error="error['surname']"
             />
           </div>
+          <div class="col-md">
+            <text-field
+                id="father_name"
+                label="По-батькові"
+                v-model="father_name"
+                :error="error['father_name']"
+            />
+          </div>
         </div>
-        <div class="row g-2 py-md-2 py-sm-2">
+        <div class="row g-2">
           <div class="col-md">
             <text-field
                 id="email"
@@ -40,11 +48,11 @@
                 id="phone"
                 label="Телефон"
                 v-model="phone"
-                :error="error['phone']"
+                :error="error['phoneNumber']"
             />
           </div>
         </div>
-        <div class="row g-2 py-md-2">
+        <div class="row g-2">
           <div class="col-md">
             <select-field
                 v-model="gender"
@@ -56,15 +64,15 @@
           </div>
           <div class="col-md">
             <date-field
-                label="День народження"
-                v-model="birthday"
+                label="Вік"
+                v-model="age"
                 type="date"
                 :max="max"
-                :error="error['birthday']"
+                :error="error['age']"
             />
           </div>
         </div>
-        <div class="row g-2 py-md-2 py-sm-2">
+        <div class="row g-2">
           <div class="col-md">
             <password-field
                 id="password"
@@ -73,12 +81,13 @@
                 :error="error['password']"
             />
           </div>
+        </div>
+        <div class="row g-2">
           <div class="col-md">
-            <password-field
-                id="confirm_password"
-                label="Підтвердити пароль"
-                v-model="password_confirmation"
-                :error="error['password_confirmation']"
+            <text-field
+                id="additional_info"
+                label="Додаткова інформація"
+                v-model="additional_info"
             />
           </div>
         </div>
@@ -116,7 +125,7 @@ import {GENDERS} from "../../../utils/enums";
 import SelectField from "../../../components/UI/Fields/SelectField.vue";
 import DateField from "../../UI/Fields/NumberField.vue";
 import AuthLayout from "../../UI/ComponentLayouts/AuthLayout.vue";
-import Logo from "@/components/UI/main/Logo.vue";
+import Logo from "../../../components/UI/main/Logo.vue";
 
 export default {
   name: "registration",
@@ -149,38 +158,36 @@ export default {
     return {
       name: '',
       surname: '',
+      father_name: '',
       email: '',
       phone: '',
       gender: '',
-      birthday: '',
+      age: '',
       password: '',
-      password_confirmation: '',
+      additional_info: '',
       // fields with verification
-      fields: ['name', 'surname', 'email', 'phone', 'gender', 'password', 'password_confirmation'],
+      fields: ['name', 'surname', 'father_name', 'email', 'phoneNumber', 'gender', 'password', 'additional_info'],
     }
   },
   methods: {
     ...mapActions('auth', {
       onRegister: 'onRegister',
-      onSanctum: 'onSanctum',
     }),
     submit() {
       if (!this.isLoggedIn) {
         this.onRegister({
           name: this.name,
           surname: this.surname,
+          father_name: this.father_name,
           email: this.email,
           phone: this.phone,
           gender: this.gender,
-          birthday: this.birthday,
+          age: this.age,
           password: this.password,
-          password_confirmation: this.password_confirmation,
+          additional_info: this.additional_info,
         });
       }
     },
   },
-  created() {
-    this.onSanctum();
-  }
 }
 </script>

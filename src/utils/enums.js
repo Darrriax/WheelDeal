@@ -124,15 +124,15 @@ export const MILEAGE = [
 export const CURRENCIES = [
     {
         id: '0',
-        name: 'UAH',
+        name: '₴',
     },
     {
         id: '1',
-        name: 'USD',
+        name: '$',
     },
     {
         id: '2',
-        name: 'EUR',
+        name: '€',
     }
 ]
 

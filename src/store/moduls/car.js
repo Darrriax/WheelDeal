@@ -1,9 +1,8 @@
 import {CarApi} from "../../api/api";
 import {DEFAULT_CAR_IMG} from "../../utils/constants";
-import {encryptData, decryptData} from '../../utils/encryption';
 
-const carData = decryptData(localStorage.getItem('car')) || {};
-const carPhoto = decryptData(localStorage.getItem('photo')) || DEFAULT_CAR_IMG;
+const carData = localStorage.getItem('car') || {};
+const carPhoto = localStorage.getItem('photo') || DEFAULT_CAR_IMG;
 
 export const car = {
     namespaced: true,
@@ -14,7 +13,7 @@ export const car = {
             id: carData.id || undefined,
             display_name: carData.display_name || undefined,
             seller_id: carData.seller_id || undefined,
-            car_type: carData.car_type || undefined,
+            body_type: carData.body_type || undefined,
             price: carData.price || undefined,
             manufacturer: carData.manufacturer || undefined,
             vin_code: carData.vin_code || undefined,
@@ -36,7 +35,7 @@ export const car = {
                 localStorage.removeItem('car');
             } else {
                 state.car = car;
-                localStorage.setItem('car', encryptData(car));
+                localStorage.setItem('car', car);
             }
         },
         setCarsData(state, cars) {
@@ -45,13 +44,13 @@ export const car = {
                 localStorage.removeItem('cars');
             } else {
                 state.cars = cars;
-                localStorage.setItem('cars', encryptData(cars));
+                localStorage.setItem('cars', cars);
             }
         },
         setPhotoUrl(state, url) {
             state.photoUrl = url;
             if (url) {
-                localStorage.setItem('photo', encryptData(url));
+                localStorage.setItem('photo', url);
             } else {
                 localStorage.removeItem('photo');
             }
@@ -95,10 +94,10 @@ export const car = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onCreateCar({commit}, {display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition}) {
+        async onCreateCar({commit}, {display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition}) {
             await this.dispatch('loading/setLoading', true);
             CarApi
-                .createCar(display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition)
+                .createCar(display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition)
                 .then(async (res) => {
                     await this.dispatch('reports/showSuccess', res);
                 })
@@ -139,10 +138,10 @@ export const car = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onUpdateCar({commit}, {display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition}) {
+        async onUpdateCar({commit}, {display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition}) {
             await this.dispatch('loading/setLoading', true);
             CarApi
-                .updateCarData(display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition)
+                .updateCarData(display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition)
                 .then(async (res) => {
                     await this.dispatch('car/setCar', res.data.data);
                     await this.dispatch('reports/showSuccess', res);

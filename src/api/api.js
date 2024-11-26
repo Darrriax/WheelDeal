@@ -1,8 +1,6 @@
 import axios from "axios";
-import {decryptData} from "../utils/encryption";
-import {buildQueryParams} from "../utils/utils";
 
-const tokenData = decryptData(localStorage.getItem('token'));
+const tokenData = localStorage.getItem('token');
 
 let token = '';
 
@@ -12,21 +10,21 @@ export function setToken(newToken) {
 
 const urls = {
     auth: {
-        login: 'api/login/',
-        logout: 'api/logout/',
-        register: 'api/register/',
+        login: 'auth/login',
+        logout: 'auth/logout',
+        register: 'auth/register',
     },
     account: {
-        profile: 'api/account/profile/',
-        update: 'api/account/update/',
+        profile: 'users/profile',
+        update: 'users/phone',
     },
     car: {
-        cars: 'api/cars/',
-        show: 'api/car/',
+        cars: 'api/cars',
+        show: 'api/car',
         create: 'api/car/create',
     },
     photo: {
-        photos: 'api/photos/',
+        photos: 'api/photos',
     }
 };
 

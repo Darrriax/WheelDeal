@@ -65,16 +65,16 @@
 
 <script>
 
-import Logo from "@/components/UI/main/Logo.vue";
-import SelectField from "@/components/UI/Fields/SelectField.vue";
-import {CONDITIONS, CURRENCIES, MANUFACTURERS, MILEAGE, TYPES} from "@/utils/enums.js";
-import PasswordField from "@/components/UI/Fields/PasswordField.vue";
-import PhoneField from "@/components/UI/Fields/PhoneField.vue";
-import DateField from "@/components/UI/Fields/NumberField.vue";
-import TextField from "@/components/UI/Fields/TextField.vue";
-import ButtonBlue from "@/components/UI/Buttons/ButtonBlue.vue";
-import Toggle from "@/components/UI/Fields/Toggle.vue";
-import NumberField from "@/components/UI/Fields/NumberField.vue";
+import Logo from "../../../components/UI/main/Logo.vue";
+import SelectField from "../../../components/UI/Fields/SelectField.vue";
+import {CONDITIONS, CURRENCIES, MANUFACTURERS, MILEAGE, TYPES} from "../../../utils/enums.js";
+import PasswordField from "../../../components/UI/Fields/PasswordField.vue";
+import PhoneField from "../../../components/UI/Fields/PhoneField.vue";
+import DateField from "../../../components/UI/Fields/NumberField.vue";
+import TextField from "../../../components/UI/Fields/TextField.vue";
+import ButtonBlue from "../../../components/UI/Buttons/ButtonBlue.vue";
+import Toggle from "../../../components/UI/Fields/Toggle.vue";
+import NumberField from "../../../components/UI/Fields/NumberField.vue";
 
 export default {
   name: "Sidebar",

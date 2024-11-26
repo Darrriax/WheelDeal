@@ -55,7 +55,7 @@ import Message from "../../UI/main/Message.vue";
 import TextField from "../../UI/Fields/TextField.vue";
 import PasswordField from "../../UI/Fields/PasswordField.vue";
 import ButtonWhite from "../../UI/Buttons/ButtonWhite.vue";
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import errorShow from "../../../mixins/errorShow";
 import AuthLayout from "../../UI/ComponentLayouts/AuthLayout.vue";
 import Logo from "@/components/UI/main/Logo.vue";
@@ -89,8 +89,6 @@ export default {
   methods: {
     ...mapActions('auth', {
       onLogin: 'onLogin',
-      onLoginFacebook: 'onLoginFacebook',
-      onSanctum: 'onSanctum',
     }),
     submit() {
       this.onLogin({
@@ -99,8 +97,5 @@ export default {
       });
     },
   },
-  mounted() {
-    this.onSanctum();
-  }
 };
 </script>

@@ -13,16 +13,20 @@
     "email": "Email",
     "phone": "Телефон",
     "title": "Моя персональна інформація",
-    "connect": "Контакти"
+    "connect": "Контакти",
+    "additional_info": "Додаткова інформація",
+    "cars": "Мої автомобілі"
   },
   "car": {
     "type": "Тип авто",
     "manufacturer": "Виробник",
     "technical_condition": "Технічний стан",
+    "vin_code": "Vin-код",
     "mileage": "Пробіг",
     "price": "Ціна",
     "currency": "Валюта",
     "accident": "Авто було в ДТП",
+    "available": "Авто доступне",
     "trade": "Доступний торг"
   }
 }

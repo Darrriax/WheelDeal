@@ -13,16 +13,20 @@
     "email": "Email",
     "phone": "Phone",
     "title": "My personal information",
-    "connect": "Connections"
+    "connect": "Connections",
+    "additional_info": "Additional information",
+    "cars": "My cars"
   },
   "car": {
     "type": "Car type",
     "manufacturer": "Manufacturer",
     "technical_condition": "Technical condition",
+    "vin_code": "Vin code",
     "mileage": "Mileage",
     "price": "Price",
     "currency": "Currency",
     "accident": "Car was in accident",
+    "available": "Car is available",
     "trade": "Trade available"
   }
 }

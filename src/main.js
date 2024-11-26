@@ -13,13 +13,46 @@ import './assets/main.css';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
-    faCalendarDays, faBell, faImages, faMagnifyingGlass,
-    faInfo, faSchool, faChartSimple, faBriefcase,
-    faBookAtlas, faUser, faSliders, faPen, faTrash,
-    faQuestion, faPersonCane, faHeart, faBabyCarriage,
-    faUsers, faPersonArrowUpFromLine, faUserPlus, faUserMinus,
-    faEye, faEdit, faCircleInfo, faClipboardList, faFile, faCross, faCarriageBaby, faSignOut,
-    faPlusCircle, faSave, faCertificate, faExclamationCircle, faTrophy, faRotateRight, faCamera, faGear
+    faCalendarDays,
+    faBell,
+    faImages,
+    faMagnifyingGlass,
+    faInfo,
+    faSchool,
+    faChartSimple,
+    faBriefcase,
+    faBookAtlas,
+    faUser,
+    faSliders,
+    faPen,
+    faTrash,
+    faQuestion,
+    faPersonCane,
+    faHeart,
+    faBabyCarriage,
+    faUsers,
+    faPersonArrowUpFromLine,
+    faUserPlus,
+    faUserMinus,
+    faEye,
+    faEdit,
+    faCircleInfo,
+    faClipboardList,
+    faFile,
+    faCross,
+    faCarriageBaby,
+    faSignOut,
+    faPlusCircle,
+    faSave,
+    faCertificate,
+    faExclamationCircle,
+    faTrophy,
+    faRotateRight,
+    faCamera,
+    faGear,
+    faRoad,
+    faCar,
+    faScrewdriverWrench, faSquareCheck, faCarBurst, faHandHoldingDollar, faCarSide, faThumbsUp
 } from '@fortawesome/free-solid-svg-icons';
 import {faFacebook, faGooglePlus, faPagelines} from '@fortawesome/free-brands-svg-icons';
 import {faChartBar, faCircleCheck, faCopy, faShareFromSquare} from '@fortawesome/free-regular-svg-icons';
@@ -36,7 +69,8 @@ library.add(
     faEye, faEdit, faCircleInfo, faClipboardList, faCross, faCarriageBaby, faSignOut,
     faCopy,
     faPlusCircle, faSave, faCertificate, faExclamationCircle, faTrophy,
-    faShareFromSquare, faRotateRight, faCamera, faGear
+    faShareFromSquare, faRotateRight, faCamera, faGear,
+    faRoad, faCar, faScrewdriverWrench, faSquareCheck, faCarBurst, faHandHoldingDollar, faCarSide, faThumbsUp
 );
 
 //Plugins

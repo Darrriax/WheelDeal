@@ -1,5 +1,6 @@
-import {AccountApi} from "../../api/api";
+import {AccountApi, setToken} from "../../api/api";
 import {DEFAULT_PROFILE_IMG, DEFAULT_PROFILE_WOMAN_IMG} from "../../utils/constants";
+import logger from "@fortawesome/vue-fontawesome/src/logger.js";
 
 const userData = localStorage.getItem('user') || {};
 const userAvatar = localStorage.getItem('avatar') || DEFAULT_PROFILE_IMG;
@@ -13,13 +14,13 @@ export const user = {
             id: userData.id || undefined,
             name: userData.name || undefined,
             surname: userData.surname || undefined,
-            father_name: userData.father_name || undefined,
+            fatherName: userData.fatherName || undefined,
             email: userData.email || undefined,
             password: userData.password || undefined,
-            phone_number: userData.phone_number || undefined,
+            phoneNumber: userData.phoneNumber || undefined,
             age: userData.age || undefined,
             gender: userData.gender,
-            additional_info: userData.additional_info || undefined,
+            additionalInfo: userData.additionalInfo || undefined,
         }
     },
     getters: {
@@ -36,7 +37,7 @@ export const user = {
                 localStorage.removeItem('user');
             } else {
                 state.user = user;
-                localStorage.setItem('user', use);
+                localStorage.setItem('user', user);
             }
         },
         setAvatarUrl(state, url) {
@@ -62,6 +63,7 @@ export const user = {
             await this.dispatch('loading/setLoading', true);
             AccountApi.getAccountData()
                 .then(async (res) => {
+                    console.log(res.data)
                     await this.dispatch('user/setUser', res.data);
                 })
                 .catch(async (err) => {
@@ -71,12 +73,12 @@ export const user = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onUpdateUser({commit}, {name, surname, father_name, email, password, phone_number, age, gender, additional_info}) {
+        async onUpdateUser({commit}, {name, surname, fatherName, password, phoneNumber, age, gender, additionalInfo}) {
             await this.dispatch('loading/setLoading', true);
             AccountApi
-                .updateData(name, surname, father_name, email, password, phone_number, age, gender, additional_info)
+                .updateData(name, surname, fatherName, password, phoneNumber, age, gender, additionalInfo)
                 .then(async (res) => {
-                    await this.dispatch('user/setUser', res.data.data);
+                    await this.dispatch('user/setUser', res.data);
                     await this.dispatch('reports/showSuccess', res);
                 })
                 .catch(async (err) => {
@@ -86,6 +88,24 @@ export const user = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
+        async onUpdateEmail({commit}, {newEmail}) {
+            await this.dispatch('loading/setLoading', true);
+            console.log(newEmail)
+            AccountApi
+                .updateEmail(newEmail)
+                .then(async (res) => {
+                    await this.dispatch('auth/setToken', res.data.token);
+                    setToken(res.data.token);
+                    await this.dispatch('reports/showSuccess', res);
+                })
+                .catch(async (err) => {
+                    await this.dispatch('reports/showErrors', err);
+                })
+                .finally(async () => {
+                    await this.dispatch('loading/setLoading', false);
+                });
+        },
+
         async onUpdateDefaultAvatar({commit}, gender) {
             if (gender.gender === 'Female') {
                 await this.dispatch('user/setAvatar', DEFAULT_PROFILE_WOMAN_IMG);

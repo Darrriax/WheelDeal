@@ -578,7 +578,7 @@ form img {
 
 /* avatar */
 .avatar-container {
-    max-width: 150px;
+    max-width: 130px;
     width: 100%;
     height: auto;
     margin: 0 auto;
@@ -640,6 +640,25 @@ form img {
 .title-text {
     font-weight: bolder;
     font-size: 20px;
+    position: relative;
+    z-index: 100;
+    transform: translate(0%, -300%);
+    height: 10px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.title-text::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 300%;
+    height: 300%;
+    background: var(--main-background-color);
+    filter: blur(7px);
+    z-index: -1;
 }
 
 /*ANIMATED THEME TOGGLE*/

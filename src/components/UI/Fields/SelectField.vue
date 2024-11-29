@@ -9,7 +9,7 @@
         :placeholder="placeholder"
         v-model="selectedValue"
         :reduce="item => item[reduceKey]"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @update:modelValue="$emit('update:modelValue', selectedValue)"
     >
       <span slot="no-options">Співпадіння відсутні</span>
     </v-select>
@@ -39,11 +39,11 @@ export default {
     options: {type: Array, required: true},
     classes: {type: String, required: false},
     label: {type: String, required: true},
-    value: {type: [Number, String], required: false},
+    value: {type: [String], required: false},
     reduceLabel: {type: String, default: 'name'},
     reduceKey: {type: String, default: 'id'},
     id: {type: String, required: false},
-    placeholder: {type: String, default: 'Select...'},
+    placeholder: {type: String, default: 'Нічого не вибрано'},
     error: {type: String, default: ''},
   },
   components: {
@@ -54,9 +54,23 @@ export default {
       selectedValue: '',
     };
   },
-  created() {
-    this.selectedValue = this.value;
+  watch: {
+    value(newVal) {
+      // Оновлюємо selectedValue лише якщо воно не збігається
+      if (newVal !== this.selectedValue) {
+        this.selectedValue = newVal;
+      }
+    },
+    selectedValue(newVal) {
+      // Емітуємо зміни назовні, якщо selectedValue змінюється
+      if (newVal !== this.value) {
+        this.$emit('update:modelValue', newVal);
+      }
+    }
   },
+  created() {
+    this.selectedValue = this.value || ''; // Якщо value порожнє, встановлюємо порожній рядок
+  }
 };
 </script>
 <style>
@@ -64,6 +78,7 @@ export default {
   padding-right: 2.5px;
   padding-top: 5px;
 }
+
 .form-control .vs__clear {
   padding-bottom: 4px;
 }
@@ -83,9 +98,11 @@ export default {
   padding: 0;
   border: none;
 }
+
 .form-control .vs__dropdown-toggle {
   margin-top: -4px;
 }
+
 .form-control .vs__dropdown-option {
   margin-left: -8px;
 }
@@ -93,5 +110,7 @@ export default {
 .form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown), .form-floating > .form-control-plaintext:focus, .form-floating > .form-control-plaintext:not(:placeholder-shown) {
   padding-top: 1.525rem;
   padding-bottom: 0.625rem;
+  min-height: calc(3.5rem + 5px);
+  height: auto;
 }
 </style>

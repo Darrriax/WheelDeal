@@ -1,20 +1,29 @@
 <template>
-  <div class="input_group form-floating">
+  <div
+      class="input_group form-floating"
+      :class="blockClasses"
+  >
     <input
         class="form-control"
-        type="text"
-        :class="classes"
+        :class="[classes, error ? 'form-control-error' : '']"
+        :type="type"
         :id="id"
         :value="modelValue"
         :placeholder="placeholder"
+        :maxlength="maxlength"
+        :minlength="minlength"
+        :max="max"
+        :min="min"
         :disabled="disabled"
         @input="validateInput($event)"
         @change="$emit('change', $event.target.value)"
-        @keydown.enter="submitValue($event, $event.target.value)"
+        @keydown.enter="submitValue($event, modelValue)"
     />
     <label
+        :class="[error ? 'text-danger' : '']"
         class="form-label label_text"
-        :for="id">
+        :for="id"
+    >
       {{ label }}
     </label>
     <small
@@ -29,28 +38,30 @@
 <script>
 export default {
   props: {
-    id: {type: String, required: false},
-    modelValue: {type: [String, Number], required: false},
-    classes: {required: false},
-    placeholder: {type: String, required: false},
-    label: {type: String, required: true},
-    disabled: {type: Boolean, default: false},
-    error: {type: String, default: ''},
+    id: { type: String, required: false },
+    type: { type: String, default: 'text' },
+    maxlength: { type: String, required: false },
+    minlength: { type: String, required: false },
+    max: { type: String, required: false },
+    min: { type: String, required: false },
+    classes: { required: false },
+    blockClasses: { required: false },
+    modelValue: { type: String, required: false },
+    placeholder: { type: String, default: 'placeholder' },
+    name: { type: String, default: '' },
+    label: { type: String, required: true },
+    disabled: { type: Boolean, default: false },
+    error: { type: String, default: '' },
   },
   methods: {
     validateInput(event) {
       // Забрати всі символи, які не є цифрами
       let value = event.target.value.replace(/\D/g, '');
 
-      // Перевірити, чи значення не менше нуля
-      if (value < 0) {
-        value = '0';
-      }
-
       // Оновити значення в полі
       event.target.value = value;
 
-      // Передати оновлене значення через модель
+      // Оновити модель
       this.$emit('update:modelValue', value);
     },
     submitValue(event, value) {

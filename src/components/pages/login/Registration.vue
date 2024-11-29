@@ -45,9 +45,9 @@
           </div>
           <div class="col-md">
             <phone-field
-                id="phone"
+                id="phoneNumber"
                 label="Телефон"
-                v-model="phone"
+                v-model="phoneNumber"
                 :error="error['phoneNumber']"
             />
           </div>
@@ -56,17 +56,17 @@
           <div class="col-md">
             <select-field
                 v-model="gender"
-                :value="gender"
+                reduceKey="id"
+                reduceLabel="name"
                 :options="genders"
                 label="Гендер"
                 :error="error['gender']"
             />
           </div>
           <div class="col-md">
-            <date-field
+            <number-field
                 label="Вік"
                 v-model="age"
-                type="date"
                 :max="max"
                 :error="error['age']"
             />
@@ -126,10 +126,12 @@ import SelectField from "../../../components/UI/Fields/SelectField.vue";
 import DateField from "../../UI/Fields/NumberField.vue";
 import AuthLayout from "../../UI/ComponentLayouts/AuthLayout.vue";
 import Logo from "../../../components/UI/main/Logo.vue";
+import NumberField from "@/components/UI/Fields/NumberField.vue";
 
 export default {
   name: "registration",
   components: {
+    NumberField,
     Logo,
     DateField,
     SelectField,
@@ -160,7 +162,7 @@ export default {
       surname: '',
       father_name: '',
       email: '',
-      phone: '',
+      phoneNumber: '',
       gender: '',
       age: '',
       password: '',
@@ -180,7 +182,7 @@ export default {
           surname: this.surname,
           father_name: this.father_name,
           email: this.email,
-          phone: this.phone,
+          phoneNumber: this.phoneNumber,
           gender: this.gender,
           age: this.age,
           password: this.password,

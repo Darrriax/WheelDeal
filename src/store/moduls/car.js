@@ -11,18 +11,18 @@ export const car = {
         photoUrl: carPhoto,
         car: {
             id: carData.id || undefined,
-            display_name: carData.display_name || undefined,
-            seller_id: carData.seller_id || undefined,
-            body_type: carData.body_type || undefined,
+            displayName: carData.displayName || undefined,
+            sellerId: carData.sellerId || undefined,
+            bodyType: carData.bodyType || undefined,
             price: carData.price || undefined,
             manufacturer: carData.manufacturer || undefined,
-            vin_code: carData.vin_code || undefined,
-            price_currency: carData.price_currency || undefined,
-            was_in_accident: carData.was_in_accident || undefined,
-            is_trade: carData.is_trade || undefined,
-            is_available: carData.is_available || undefined,
+            vinCode: carData.vinCode || undefined,
+            priceCurrency: carData.priceCurrency || undefined,
+            wasInAccident: carData.wasInAccident || undefined,
+            isTrade: carData.isTrade || undefined,
+            isAvailable: carData.isAvailable || undefined,
             mileage: carData.mileage || undefined,
-            technical_condition: carData.technical_condition || undefined,
+            technicalCondition: carData.technicalCondition || undefined,
         },
         cars: {}
     },
@@ -94,10 +94,10 @@ export const car = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onCreateCar({commit}, {display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition}) {
+        async onCreateCar({commit}, {displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition}) {
             await this.dispatch('loading/setLoading', true);
             CarApi
-                .createCar(display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition)
+                .createCar(displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition)
                 .then(async (res) => {
                     await this.dispatch('reports/showSuccess', res);
                 })
@@ -138,10 +138,10 @@ export const car = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onUpdateCar({commit}, {display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition}) {
+        async onUpdateCar({commit}, {displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition}) {
             await this.dispatch('loading/setLoading', true);
             CarApi
-                .updateCarData(display_name, seller_id, body_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition)
+                .updateCarData(displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition)
                 .then(async (res) => {
                     await this.dispatch('car/setCar', res.data.data);
                     await this.dispatch('reports/showSuccess', res);

@@ -9,7 +9,7 @@
         v-mask="'38(0##)###-##-##'"
         @input="$emit('update:modelValue', $event.target.value)"
         @change="$emit('change', $event.target.value)"
-        @keydown.enter="submitValue"
+        @keydown.enter="submitValue($event, modelValue)"
     />
     <label
         :class="[error ? 'text-danger' : '']"

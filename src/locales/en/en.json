@@ -1,7 +1,8 @@
 {
   "ui": {
     "save": "Save",
-    "exit": "Exit"
+    "exit": "Exit",
+    "search": "Search"
   },
   "profile": {
     "name": "Name",
@@ -13,15 +14,15 @@
     "email": "Email",
     "phone": "Phone",
     "title": "My personal information",
-    "connect": "Connections",
-    "additional_info": "Additional information",
+    "connect": "Save",
+    "additionalInfo": "Additional information",
     "cars": "My cars"
   },
   "car": {
     "type": "Car type",
     "manufacturer": "Manufacturer",
-    "technical_condition": "Technical condition",
-    "vin_code": "Vin code",
+    "technicalCondition": "Technical condition",
+    "vinCode": "Vin code",
     "mileage": "Mileage",
     "price": "Price",
     "currency": "Currency",

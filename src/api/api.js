@@ -16,7 +16,9 @@ const urls = {
     },
     account: {
         profile: 'users/profile',
-        update: 'users/phone',
+        email: 'users/email',
+        phone: 'users/phone',
+        user: 'users',
     },
     car: {
         cars: 'api/cars',
@@ -68,9 +70,9 @@ FormDataApiInstance.interceptors.request.use(function (config) {
 
 export const AuthApi = {
     // Вказуємо всю необхідну інформацію, щоб зареєструватися і мати доступ до системи
-    register(name, surname, father_name, password, email, phone_number, age, gender, additional_info) {
+    register(name, surname, fatherName, password, email, phoneNumber, age, gender, additionalInfo) {
         const url = urls.auth.register;
-        const data = {name, surname, father_name, password, email, phone_number, age, gender, additional_info};
+        const data = {name, surname, fatherName, password, email, phoneNumber, age, gender, additionalInfo};
         return DefaultApiInstance.post(url, data);
     },
     // Після реєстрації можемо залогінитися на допомогою імейлу та паролю
@@ -87,8 +89,8 @@ export const AuthApi = {
 };
 
 export const AccountApi = {
-    // Отримуємо дані акаунту (name, surname, father_name, password, email, phone_number, age, gender,
-    // additional_info), а також дані про усі автівки цього продавця display_name, seller_id, car_type,
+    // Отримуємо дані акаунту (name, surname, fatherName, password, email, phoneNumber, age, gender,
+    // additionalInfo), а також дані про усі автівки цього продавця display_name, seller_id, car_type,
     // price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage,
     // technical_condition)
     getAccountData() {
@@ -96,10 +98,42 @@ export const AccountApi = {
         return DefaultApiInstance.get(url);
     },
     // Тут оновлюємо суто дані користувача, якщо він щось не так ввів
-    updateData(name, surname, father_name, email, password, phone_number, age, gender, additional_info) {
-        const url = urls.account.update;
-        const data = {name, surname, father_name, email, password, phone_number, age, gender, additional_info};
-        return FormDataApiInstance.post(url, data);
+    updateData(name, surname, fatherName, password, phoneNumber, age, gender, additionalInfo) {
+        const url = urls.account.profile;
+
+        // Перевірка поля password
+        password = password && password.trim() ? password : null;
+
+        const data = {
+            name,
+            surname,
+            fatherName,
+            password,
+            phoneNumber,
+            age,
+            gender,
+            additionalInfo
+        };
+
+        console.log(data); // Для перевірки даних перед відправкою
+        return DefaultApiInstance.put(url, data);
+    },
+    // Тут оновлюємо email користувача і сетимо новий token
+    updateEmail(newEmail) {
+        const url = urls.account.email;
+        const data = {newEmail};
+        return DefaultApiInstance.put(url, data);
+    },
+    // Для отримання телефону користувача по його ID
+    getPhone(userId) {
+        const url = urls.account.phone;
+        const data = {userId};
+        return DefaultApiInstance.post(url, data);
+    },
+    // Для отримання даних користувача по його ID
+    getUserData(userId) {
+        const url = urls.account.user + "/" + userId;
+        return DefaultApiInstance.get(url);
     },
 };
 

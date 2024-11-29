@@ -49,12 +49,12 @@ export const reports = {
         },
         async showErrors({commit}, error) {
             await this.dispatch('reports/hideFieldError');
-            if (error.response?.status === 422) {
+            if (error.response?.status === 400) {
                 await this.dispatch('reports/showMessage', error.response?.data?.message || "Помилка при виконанні");
-                const err = error.response.data.errors;
+                const err = error.response.data;
                 if (err) {
                     for (const field of Object.keys(err)) {
-                        const error = err[field][0];
+                        const error = err[field];
                         await this.dispatch('reports/showFieldError', {field, error: error});
                     }
                 }
@@ -66,9 +66,9 @@ export const reports = {
             } else if (error.response?.status === 403) {
                 await this.dispatch('reports/showMessage', error.response?.data?.message || error.response?.message || "Доступ заборонено");
             } else if (error.response?.status === 500) {
-                await this.dispatch('reports/showMessage', "Помилка сервера. Спробуйте перезавантажити сторінку"); //error.response?.data?.message
+                await this.dispatch('reports/showMessage', "Помилка сервера. Спробуйте перезавантажити сторінку");
             } else {
-                await this.dispatch('reports/showMessage', error.response?.data?.message || error.response?.message || "Помилка");
+                await this.dispatch('reports/showMessage', error.response?.data?.message || error.response?.message || error.response?.data?.detail || "Помилка");
             }
         },
     },

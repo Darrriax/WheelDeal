@@ -1,7 +1,8 @@
 {
   "ui": {
     "save": "Зберегти",
-    "exit": "Вийти"
+    "exit": "Вийти",
+    "search": "Знайти"
   },
   "profile": {
     "name": "Імʼя",
@@ -13,15 +14,15 @@
     "email": "Email",
     "phone": "Телефон",
     "title": "Моя персональна інформація",
-    "connect": "Контакти",
-    "additional_info": "Додаткова інформація",
+    "connect": "Збереження",
+    "additionalInfo": "Додаткова інформація",
     "cars": "Мої автомобілі"
   },
   "car": {
     "type": "Тип авто",
     "manufacturer": "Виробник",
-    "technical_condition": "Технічний стан",
-    "vin_code": "Vin-код",
+    "technicalCondition": "Технічний стан",
+    "vinCode": "Vin-код",
     "mileage": "Пробіг",
     "price": "Ціна",
     "currency": "Валюта",

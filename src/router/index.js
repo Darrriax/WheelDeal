@@ -12,36 +12,10 @@ import AddCar from "../components/pages/car/AddCar.vue";
 
 import NotFound from "../components/pages/errors/NotFound.vue";
 
-
-// Maybe we will use it
-import ForgotPassword from "../components/pages/login/ForgotPassword.vue";
-import ResetPassword from "../components/pages/login/ResetPassword.vue";
-import Verification from "../components/pages/account/Verification.vue";
-import Test from "@/components/pages/Test.vue";
-
 const routes = [
     {
-        path: '/test',
-        component: Test,
-        name: 'test',
-        meta: {
-            requiresAuth: false,
-            title: 'тест',
-            metaTags: [
-                {
-                    name: 'description',
-                    content: 'тест'
-                },
-                {
-                    property: 'og:title',
-                    content: 'тест'
-                },
-                {
-                    property: 'og:description',
-                    content: 'тест'
-                }
-            ]
-        }
+        path: '/',
+        redirect: '/profile',
     },
     {
         path: '/registration',
@@ -158,11 +132,6 @@ const routes = [
             ]
         }
     },
-
-    // {
-    //     path: '/user/:id/recommend',   порекомендувати користувачу своє авто, якщо воно підходить під його вподобання.
-
-
     {
         path: '/car',
         component: Cars,

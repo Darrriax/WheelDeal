@@ -2,6 +2,7 @@ import {AccountApi, AuthApi, setToken} from "../../api/api";
 import router from "../../router";
 import {resetTheme} from "../../mixins/setTheme";
 import {resetLang} from "../..//mixins/setLang.js";
+import {DEFAULT_PROFILE_IMG, DEFAULT_PROFILE_WOMAN_IMG} from "../../utils/constants.js";
 
 const tokenData = localStorage.getItem('token') || null;
 
@@ -32,7 +33,7 @@ export const auth = {
                 AuthApi
                     .login(email, password)
                     .then(async (res) => {
-                        console.log(res)
+                        console.log(res.data)
                         await this.dispatch('auth/setToken', res.data.token);
                         setToken(res.data.token);
 
@@ -43,22 +44,21 @@ export const auth = {
                             setTimeout(() => {
                                 AccountApi.getAccountData()
                                     .then(async (res) => {
-                                        console.log(res)
                                         await this.dispatch('user/setUser', res.data);
-                                        // (res.data.gender === "Female") ?
-                                        //     await this.dispatch('user/setAvatar', res.data.avatar?.url || DEFAULT_PROFILE_WOMAN_IMG)
-                                        //     :
-                                        //     await this.dispatch('user/setAvatar', res.data.avatar?.url || DEFAULT_PROFILE_IMG);
+                                        await this.dispatch('reports/showErrors', res);
+                                        (res.data.gender === "Female") ?
+                                            await this.dispatch('user/setAvatar', res.data.avatar?.url || DEFAULT_PROFILE_WOMAN_IMG)
+                                            :
+                                            await this.dispatch('user/setAvatar', res.data.avatar?.url || DEFAULT_PROFILE_IMG);
                                     })
                                     .catch(async (err) => {
-                                        await this.dispatch('reports/showErrors', err.response.data);
+                                        await this.dispatch('reports/showErrors', err);
                                     });
                             }, 1000);
                         }
                     )
                     .catch(async err => {
-                        console.log(err);
-                        await this.dispatch('reports/showErrors', err.response.data);
+                        await this.dispatch('reports/showErrors', err);
                     })
                     .finally(async () => {
                         await this.dispatch('loading/setLoading', false);
@@ -68,24 +68,22 @@ export const auth = {
             async onRegister({commit}, {
                 name,
                 surname,
-                father_name,
+                fatherName,
                 password,
                 email,
-                phone_number,
+                phoneNumber,
                 age,
                 gender,
-                additional_info
+                additionalInfo
             }) {
                 AuthApi
-                    .register(name, surname, father_name, password, email, phone_number, age, gender, additional_info)
+                    .register(name, surname, fatherName, password, email, phoneNumber, age, gender, additionalInfo)
                     .then(async (res) => {
-                        console.log(res)
                         await this.dispatch('reports/showSuccess', res);
                         await this.dispatch('auth/onLogin', {email: email, password: password});
                     })
                     .catch(async (err) => {
-                        console.log(err.response.data)
-                        await this.dispatch('reports/showErrors', err.response.data);
+                        await this.dispatch('reports/showErrors', err);
                     });
             }
             ,
@@ -97,7 +95,7 @@ export const auth = {
                         await this.dispatch('reports/showSuccess', res);
                     })
                     .catch(async (err) => {
-                        await this.dispatch('reports/showErrors', err.response.data);
+                        await this.dispatch('reports/showErrors', err);
                     })
                     .finally(async () => {
                         await this.dispatch('loading/setLoading', false);

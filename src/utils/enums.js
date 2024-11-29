@@ -1,79 +1,103 @@
 export const GENDERS = [
     {
-        id: 'F',
-        name: 'Жіноча',
+        id: 'Female',
+        name: 'Female',
     },
     {
-        id: 'M',
-        name: 'Чоловіча',
+        id: 'Male',
+        name: 'Male',
     },
 ];
 
 export const TYPES = [
     {
         id: '0',
-        name: 'Будь-який',
+        name: 'Sedan',
     },
     {
         id: '1',
-        name: 'Легкові',
+        name: 'Hatchback',
     },
     {
         id: '2',
-        name: 'Мото',
+        name: 'Pickup',
     },
     {
         id: '3',
-        name: 'Вантажівки',
+        name: 'Minivan',
     },
     {
         id: '4',
-        name: 'Прицепи',
+        name: 'Crossover',
     },
     {
         id: '5',
-        name: 'Спецтехніка',
+        name: 'SUV',
     },
     {
         id: '6',
-        name: 'Сільгосптехніка',
+        name: 'Van',
     },
     {
         id: '7',
-        name: 'Автобуси',
-    },
-    {
-        id: '8',
-        name: 'Водний транспорт',
-    },
-    {
-        id: '9',
-        name: 'Повітряний транспорт',
-    },
-    {
-        id: '10',
-        name: 'Автобудинки',
+        name: 'MPV',
     },
 ];
 
 export const MANUFACTURERS = [
     {
         id: '0',
-        name: 'BMW',
+        name: 'Skoda',
     },
     {
         id: '1',
-        name: 'Mercedes-Benz',
+        name: 'Honda',
     },
     {
         id: '2',
-        name: 'Toyota',
+        name: 'BMW',
     },
     {
         id: '3',
-        name: 'Audi',
+        name: 'Fiat',
     },
-]
+    {
+        id: '4',
+        name: 'Renault',
+    },
+    {
+        id: '5',
+        name: 'Toyota',
+    },
+    {
+        id: '6',
+        name: 'Volkswagen',
+    },
+    {
+        id: '7',
+        name: 'Hyundai',
+    },
+    {
+        id: '8',
+        name: 'Lexus',
+    },
+    {
+        id: '9',
+        name: 'Nissan',
+    },
+    {
+        id: '10',
+        name: 'Kia',
+    },
+    {
+        id: '11',
+        name: 'Porsche',
+    },
+    {
+        id: '12',
+        name: 'Mercedes-Benz',
+    },
+];
 
 export const CONDITIONS = [
     {
@@ -124,15 +148,15 @@ export const MILEAGE = [
 export const CURRENCIES = [
     {
         id: '0',
-        name: '₴',
+        name: 'USD',
     },
     {
         id: '1',
-        name: '$',
+        name: 'UAH',
     },
     {
         id: '2',
-        name: '€',
+        name: 'EUR',
     }
 ]
 

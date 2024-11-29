@@ -1,11 +1,7 @@
 <template>
   <nav class="sidebar">
     <logo/>
-    <form
-        action="#"
-        @submit.prevent="submit($event)"
-    >
-      <!--      <h6 class="mt-3">Реєстрація особистого кабінету</h6>-->
+    <form class="row" @submit.prevent>
       <div class="row g-2">
         <div class="col-md col-6">
           <select-field
@@ -24,7 +20,7 @@
         <div class="col-md col-6">
           <select-field
               :options="technical_conditions"
-              :label="$t('car.technical_condition')"
+              :label="$t('car.technicalCondition')"
           />
         </div>
         <div class="col-md col-6">
@@ -53,8 +49,9 @@
       </div>
       <div class="d-flex flex-column align-items-center">
         <button-blue
-            classes="btn btn-outline mt-3 mb-2 max-w-200 w100"
-            label="Пошук"
+            @click="postData()"
+            :label="$t('ui.search')"
+            classes="w100 max-w-200 m-b-15 m-t-15 m-l-auto m-r-auto"
             type="submit"
         />
         <hr>
@@ -109,7 +106,6 @@ export default {
   data() {
     return {};
   },
-  methods: {
-  },
+  methods: {},
 }
 </script>

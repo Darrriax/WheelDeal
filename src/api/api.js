@@ -1,4 +1,6 @@
 import axios from "axios";
+import login from "@/components/pages/login/Login.vue";
+import {buildQueryParams} from "@/utils/utils.js";
 
 const tokenData = localStorage.getItem('token');
 
@@ -21,9 +23,9 @@ const urls = {
         user: 'users',
     },
     car: {
-        cars: 'api/cars',
-        show: 'api/car',
-        create: 'api/car/create',
+        cars: 'cars',
+        search: 'cars/search',
+        views: 'admin/car-views'
     },
     photo: {
         photos: 'api/photos',
@@ -32,6 +34,14 @@ const urls = {
 
 const defaultConfig = {
     baseURL: import.meta.env.VITE_APP_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    }
+};
+
+const defaultKafkaConfig = {
+    baseURL: import.meta.env.VITE_APP_KAFKA_URL,
     headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
@@ -47,10 +57,20 @@ const formDataConfig = {
 };
 
 export const DefaultApiInstance = axios.create(defaultConfig);
+export const KafkaApiInstance = axios.create(defaultKafkaConfig);
 
 export const FormDataApiInstance = axios.create(formDataConfig);
 
 DefaultApiInstance.interceptors.request.use(function (config) {
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        config.headers.Authorization = `Bearer ${tokenData}`;
+    }
+    return config;
+});
+
+KafkaApiInstance.interceptors.request.use(function (config) {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     } else {
@@ -125,30 +145,42 @@ export const AccountApi = {
         return DefaultApiInstance.put(url, data);
     },
     // Для отримання телефону користувача по його ID
-    getPhone(userId) {
+    getPhone({userId}) {
         const url = urls.account.phone;
         const data = {userId};
         return DefaultApiInstance.post(url, data);
     },
     // Для отримання даних користувача по його ID
     getUserData(userId) {
-        const url = urls.account.user + "/" + userId;
+        const url = `${urls.account.user}/${userId}`;
         return DefaultApiInstance.get(url);
     },
 };
 
 export const CarApi = {
-    // Отримуємо всі автомобілі, які є у системі
-    cars() {
-        const url = urls.car.cars;
-        return DefaultApiInstance.get(url);
-    },
     // Отримуємо дані авто display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency,
     // was_in_accident, is_trade, is_available, mileage, technical_condition по його ID
-    getCarDataById(car_id) {
-        const url = urls.car.show + car_id;
+    getCarDataById({car_id}) {
+        const url = `${urls.car.cars}/${car_id}`;
         return DefaultApiInstance.get(url);
     },
+    // Отримуємо всі автомобілі, які є у системі, відповідно до пошуку
+    cars({manufacturer, bodyType, priceFrom, priceTo, mileageFrom, mileageTo, displayName, page, size}) {
+        const query = buildQueryParams({
+            manufacturer,
+            bodyType,
+            priceFrom,
+            priceTo,
+            mileageFrom,
+            mileageTo,
+            displayName,
+            page,
+            size
+        });
+        const url = query ? `${urls.car.search}?${query}` : urls.car.search;
+        return DefaultApiInstance.get(url);
+    },
+
     // Створюємо авто
     createCar(display_name, seller_id, car_type, price, manufacturer, vin_code, price_currency, was_in_accident, is_trade, is_available, mileage, technical_condition) {
         const url = urls.car.create;
@@ -191,6 +223,11 @@ export const CarApi = {
         };
         return FormDataApiInstance.post(url, data);
     },
+    //Отримати кількість переглядів
+    getCarViews(car_id) {
+        const url = `${urls.car.views}/${car_id}`;
+        return KafkaApiInstance.get(url);
+    }
 }
 
 export const PhotosApi = {

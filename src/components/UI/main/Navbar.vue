@@ -90,15 +90,17 @@ export default {
     setLang
   ],
   methods: {
-    ...mapActions('auth', {
-      onLogout: 'onLogout',
-    }),
+    ...mapActions('auth', ['onLogout']),
+    ...mapActions('user', ['onGetUser']),
     logoutBtn() {
       this.onLogout();
     },
     goToProfile() {
       router.push('/profile');
-    }
+    },
+  },
+  created() {
+    this.onGetUser();
   },
 }
 </script>

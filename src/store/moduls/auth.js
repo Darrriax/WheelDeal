@@ -40,11 +40,17 @@ export const auth = {
                         await this.dispatch('reports/showSuccess', res);
                     })
                     .then(async () => {
-                            await router.push('/profile');
                             setTimeout(() => {
                                 AccountApi.getAccountData()
                                     .then(async (res) => {
                                         await this.dispatch('user/setUser', res.data);
+                                        if (this.getters['user/isLoggedIn']) {
+                                            if (router.currentRoute.value.query.redirect === '/profile' || !router.currentRoute.value.query.redirect) {
+                                                await router.push('/profile');
+                                            } else if (router.currentRoute.value.query.redirect) {
+                                                await router.push(router.currentRoute.value.query.redirect.toString());
+                                            }
+                                        }
                                         await this.dispatch('reports/showErrors', res);
                                         (res.data.gender === "Female") ?
                                             await this.dispatch('user/setAvatar', res.data.avatar?.url || DEFAULT_PROFILE_WOMAN_IMG)

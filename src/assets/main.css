@@ -24,6 +24,7 @@
     --main-background-color: #ffffff;
     --second-background-color: #000000;
     --background-content-color: #f5f5f5;
+    --background-text-color: #c4c4c4;
     --background-gray-color: #f8f8f8;
     --primary-text-color: #142343;
     --secondary-text-color: #cbcbcb;
@@ -51,6 +52,7 @@
     --main-background-color: #030e21;
     --second-background-color: #ffffff;
     --background-content-color: #14213d;
+    --background-text-color: #0a1121;
     --background-gray-color: #14213d;
     --primary-text-color: #ffffff;
     --secondary-text-color: #223867;
@@ -567,6 +569,20 @@ form img {
     min-width: 150px;
 }
 
+.btn-small-width {
+    min-width: 50px !important;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center; /* Вирівнювання по горизонталі */
+    align-items: center; /* Вирівнювання по вертикалі */
+    gap: 5px; /* Проміжок між кнопками */
+}
+
 /* SIDEBAR */
 .sidebar_container {
     min-width: 210px;
@@ -654,7 +670,7 @@ form img {
     top: 50%;
     left: 50%;
     transform: translate(-50%, 0%);
-    width: 300%;
+    width: 100%;
     height: 300%;
     background: var(--main-background-color);
     filter: blur(7px);
@@ -1001,6 +1017,14 @@ form img {
     margin-left: -8px;
 }
 
+/*CAROUSEL*/
+.carousel-image {
+    width: 750px; /* Розтягуємо зображення на всю ширину контейнера */
+    height: 480px; /* Висота зображення буде рівною висоті контейнера */
+    object-fit: cover; /* Обрізаємо зображення, щоб воно заповнювало контейнер */
+    border-radius: 8px;
+}
+
 /*-------MEDIA-------*/
 
 @media (min-width: 576px) {
@@ -1025,7 +1049,18 @@ form img {
         border-radius: 10px;
         align-items: center;
         text-align: center;
+    }
 
+    .carousel-image {
+        width: 550px;
+        height: 270px;
+    }
+}
+
+@media (max-width: 1170px) {
+    .carousel-image {
+        width: 400px;
+        height: 200px;
     }
 }
 
@@ -1037,6 +1072,11 @@ form img {
 
     .sidebar {
         width: 100%;
+    }
+
+    .carousel-image {
+        width: 100%;
+        height: 100%;
     }
 }
 

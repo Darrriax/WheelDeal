@@ -15,4 +15,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    host: '0.0.0.0',  // Це дозволить доступ з усіх IP-адрес
+    port: 5173,
+    open: false,
+  },
 })

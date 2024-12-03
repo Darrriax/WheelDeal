@@ -28,6 +28,7 @@
   },
   "car": {
     "cars": "Cars found",
+    "noCars": "You haven't added any cars",
     "myCars": "My cars",
     "type": "Car type",
     "manufacturer": "Manufacturer",
@@ -44,6 +45,7 @@
     "trade": "Trade available",
     "noFound": "No cars found based on your search",
     "buyNow": "Buy now",
+    "views": "Views",
     "owner": {
       "info": "Car owner personal info"
     }

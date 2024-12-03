@@ -4,7 +4,7 @@ import router from "@/router/index.js";
 import {decryptData, encryptData} from "@/utils/encryption.js";
 
 const carData = decryptData(localStorage.getItem('car')) || {};
-const next = decryptData(localStorage.getItem('next')) || {};
+const views = decryptData(localStorage.getItem('views')) || {};
 const carPhoto = localStorage.getItem('photo') || DEFAULT_CAR_IMG;
 
 export const car = {
@@ -12,7 +12,7 @@ export const car = {
 
     state: {
         photoUrl: carPhoto,
-        next: next || false,
+        views: views || 0,
         car: {
             owner: {} || undefined,
             id: carData.id || undefined,
@@ -33,7 +33,7 @@ export const car = {
         cars: {}
     },
     getters: {
-        getNext: state => state.next,
+        getViews: state => state.views,
     },
     mutations: {
         setCarData(state, car) {
@@ -62,9 +62,9 @@ export const car = {
                 localStorage.removeItem('photo');
             }
         },
-        setNextButton(state, next) {
-            state.next = next;
-            localStorage.setItem('next', next);
+        setCarViews(state, views) {
+            state.views = views;
+            localStorage.setItem('views', views);
         },
     },
     actions: {
@@ -77,30 +77,45 @@ export const car = {
         setPhoto({commit}, photo) {
             commit('car/setPhotoUrl', photo, {root: true});
         },
-        setNext({commit}, next) {
-            commit('car/setNextButton', next, {root: true});
-        },
-        async onGetCars() {
-            await this.dispatch('loading/setLoading', true);
-            CarApi.cars()
-                .then(async (res) => {
-                    localStorage.setItem('cars', JSON.stringify(res.data.cars));
-                    await this.dispatch('car/setCars', res.data);
-                })
-                .catch(async (err) => {
-                    await this.dispatch('reports/showErrors', err);
-                })
-                .finally(async () => {
-                    await this.dispatch('loading/setLoading', false);
-                });
+        setViews({commit}, views) {
+            commit('car/setCarViews', views, {root: true});
         },
         async onGetCarById({commit}, {car_id}) {
+            try {
+                await this.dispatch('loading/setLoading', true);
+
+                // Виконуємо обидва запити паралельно
+                const [carDataResponse, carViewsResponse] = await Promise.all([
+                    CarApi.getCarDataById({car_id}),
+                    CarApi.getCarViews({car_id})
+                ]);
+
+                // Зберігаємо дані авто
+                localStorage.setItem('carId', JSON.stringify(carDataResponse.data.id));
+                localStorage.setItem('car', JSON.stringify(carDataResponse.data));
+                await this.dispatch('car/setCar', carDataResponse.data);
+
+                // Зберігаємо кількість переглядів авто
+                localStorage.setItem('carViews', JSON.stringify(carViewsResponse.data.watchAmount));
+                await this.dispatch('car/setViews', carViewsResponse.data.watchAmount);
+
+                // Перенаправлення на сторінку авто
+                await router.push({path: `/car/${car_id}`});
+            } catch (err) {
+                // Виведення помилок
+                await this.dispatch('reports/showErrors', err);
+            } finally {
+                // Завершення стану завантаження
+                await this.dispatch('loading/setLoading', false);
+            }
+        },
+        async onGetCarViews({commit}, {car_id}) {
             await this.dispatch('loading/setLoading', true);
-            CarApi.getCarDataById({car_id})
+            CarApi.getCarViews({car_id})
                 .then(async (res) => {
-                    localStorage.setItem('carId', JSON.stringify(res.data.id));
-                    localStorage.setItem('car', JSON.stringify(res.data));
-                    await this.dispatch('car/setCar', res.data);
+                    console.log(res)
+                    // localStorage.setItem('carViews', JSON.stringify(res.data.id));
+                    // await this.dispatch('car/setViews', res.data.views);
                 })
                 .catch(async (err) => {
                     await this.dispatch('reports/showErrors', err);

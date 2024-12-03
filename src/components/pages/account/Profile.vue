@@ -115,7 +115,7 @@
         </div>
         <div v-else>
           <box>
-            {{ $t('car.noFound') }}
+            {{ $t('car.noCars') }}
           </box>
         </div>
       </div>
@@ -142,7 +142,6 @@ import ButtonAvatar from "../../UI/Buttons/ButtonAvatar.vue";
 import Message from "../../UI/main/Message.vue";
 import Layout from "../../layout.vue";
 import errorShow from "../../../mixins/errorShow";
-import * as constants from "../../../utils/constants";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Cars from "@/components/pages/car/Cars.vue";
 import CarBox from "@/components/pages/car/CarBox.vue";

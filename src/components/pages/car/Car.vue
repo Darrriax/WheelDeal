@@ -52,6 +52,10 @@
               <font-awesome-icon icon="fa-solid fa-thumbs-up"/>
               {{ $t('car.available') }}: {{ car.isAvailable ? 'Yes' : 'No' }}
             </div>
+            <div class="col car-info">
+              <font-awesome-icon icon="fa-solid fa-eye"/>
+              {{ $t('car.views') }}: {{getViews}}
+            </div>
             <button-blue :label="$t('car.buyNow')" @click="buyNow(car.owner.id)" />
             <h4 v-if="showPhone" class="text-center pt-3">{{ getPhone }}</h4>
           </div>
@@ -110,6 +114,9 @@ export default {
     }),
     ...mapGetters('user', {
       getPhone: 'getPhone',
+    }),
+    ...mapGetters('car', {
+      getViews: 'getViews',
     }),
   },
   methods: {

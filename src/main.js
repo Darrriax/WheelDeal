@@ -52,7 +52,14 @@ import {
     faGear,
     faRoad,
     faCar,
-    faScrewdriverWrench, faSquareCheck, faCarBurst, faHandHoldingDollar, faCarSide, faThumbsUp
+    faScrewdriverWrench,
+    faSquareCheck,
+    faCarBurst,
+    faHandHoldingDollar,
+    faCarSide,
+    faThumbsUp,
+    faArrowRight,
+    faArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
 import {faFacebook, faGooglePlus, faPagelines} from '@fortawesome/free-brands-svg-icons';
 import {faChartBar, faCircleCheck, faCopy, faShareFromSquare} from '@fortawesome/free-regular-svg-icons';
@@ -70,7 +77,8 @@ library.add(
     faCopy,
     faPlusCircle, faSave, faCertificate, faExclamationCircle, faTrophy,
     faShareFromSquare, faRotateRight, faCamera, faGear,
-    faRoad, faCar, faScrewdriverWrench, faSquareCheck, faCarBurst, faHandHoldingDollar, faCarSide, faThumbsUp
+    faRoad, faCar, faScrewdriverWrench, faSquareCheck, faCarBurst, faHandHoldingDollar, faCarSide, faThumbsUp,
+    faArrowRight, faArrowLeft
 );
 
 //Plugins

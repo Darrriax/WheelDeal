@@ -102,69 +102,21 @@
           </div>
         </form>
       </div>
-      <h5 class="py-3 text-center">{{ $t('profile.cars') }}</h5>
-      <div class="p-0 white_card justify-content-between px-4 py-0 single-card-box-shadow" v-for="car in cars">
-        <div class="row displayFlex align-items-center justify-content-center h-100">
-          <div class="col-md-3 col-sm-12">
-            <img
-                :src="car.mainPhoto || constants().DEFAULT_CAR_IMG"
-                alt="Car"
-                class="car-main-image"
-            >
-          </div>
-          <div class="col-md-9 col-sm-12 row">
-            <div class="col-9 p-0 m-0">
-              <h3 class="card-title textBold p-2">{{ car.displayName }}</h3>
-            </div>
-            <div class="col-3 end-0 p-0 m-0">
-              <h5 class="card-price textBold p-2 textRight">{{ car.price }} <b
-                  style="color: var(--background-ligth-blue)">{{ car.priceCurrency }}</b></h5>
-            </div>
-            <div class="row row-cols-2 col-6 row">
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-car-side"/>
-                {{ $t('car.type') }}:
-              </div>
-              {{ car.bodyType }}
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-car"/>
-                {{ $t('car.manufacturer') }}
-              </div>
-              {{ car.manufacturer }}
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-square-check"/>
-                {{ $t('car.vinCode') }}
-              </div>
-              {{ car.vinCode }}
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-road"/>
-                {{ $t('car.mileage') }}
-              </div>
-              {{ car.mileage }}
-            </div>
-            <div class="row row-cols-2 col-6 row m-0 p-0">
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-screwdriver-wrench"/>
-                {{ $t('car.technicalCondition') }}
-              </div>
-              {{ car.technicalCondition }}
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-car-burst"/>
-                {{ $t('car.accident') }}
-              </div>
-              {{ car.wasInAccident }}
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-hand-holding-dollar"/>
-                {{ $t('car.trade') }}
-              </div>
-              {{ car.isTrade }}
-              <div class="col car-info">
-                <font-awesome-icon icon="fa-solid fa-thumbs-up"/>
-                {{ $t('car.available') }}
-              </div>
-              {{ car.isAvailable }}
-            </div>
-          </div>
+      <button-white
+          classes="p-1 py-2 w-100 rounded-start rounded-end"
+          :label="$t('ui.add')"
+          icon="fa-solid fa-plus-circle"
+          type="button"
+      />
+      <div class="px-3 col-12" id="profile">
+        <div v-if="user.usersCars.length > 0">
+          <h5 class="py-3 text-center">{{ $t('car.myCars') }}</h5>
+          <car-box :cars="user.usersCars"/>
+        </div>
+        <div v-else>
+          <box>
+            {{ $t('car.noCars') }}
+          </box>
         </div>
       </div>
     </div>
@@ -174,7 +126,6 @@
 </template>
 
 <script>
-import {user} from "../../../store/moduls/user";
 import {mapActions, mapGetters, mapState} from "vuex";
 import {GENDERS} from '../../../utils/enums';
 import Sidebar from "../../UI/main/Sidebar.vue";
@@ -191,12 +142,16 @@ import ButtonAvatar from "../../UI/Buttons/ButtonAvatar.vue";
 import Message from "../../UI/main/Message.vue";
 import Layout from "../../layout.vue";
 import errorShow from "../../../mixins/errorShow";
-import * as constants from "../../../utils/constants";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import Cars from "@/components/pages/car/Cars.vue";
+import CarBox from "@/components/pages/car/CarBox.vue";
+import Box from "@/components/UI/main/Box.vue";
 
 export default {
   name: "Profile",
   components: {
+    Box, CarBox,
+    Cars,
     FontAwesomeIcon,
     Layout,
     Message,
@@ -242,57 +197,6 @@ export default {
       componentKey: 0,
       password: '',
       fields: ['avatar', 'name', 'surname', 'email', 'gender', 'phoneNumber', 'password'],
-      cars: [
-        {
-          id: 1,
-          mainPhoto: 'public/images/cars/dodge_challenger.webp',
-          displayName: 'Dodge Challenger SRT Hellcat 2023',
-          sellerId: 2,
-          bodyType: 'Купе',
-          price: '80000',
-          manufacturer: 'Dodge',
-          vinCode: '12sdvbrhu4235246',
-          priceCurrency: '€',
-          wasInAccident: 'No',
-          isTrade: 'No',
-          isAvailable: 'Yes',
-          mileage: '0',
-          technicalCondition: 'New'
-        },
-        {
-          id: 2,
-          mainPhoto: 'public/images/cars/dodge_charger.avif',
-          displayName: 'Dodge Charger 2021',
-          sellerId: 2,
-          bodyType: 'Седан',
-          price: '69995',
-          manufacturer: 'Dodge',
-          vinCode: '434456wf43',
-          priceCurrency: '$',
-          wasInAccident: 'No',
-          isTrade: 'No',
-          isAvailable: 'Yes',
-          mileage: '2000',
-          technicalCondition: 'Good'
-        },
-        {
-          id: 3,
-          mainPhoto: 'public/images/cars/vito.jpg',
-          displayName: 'Mercedes-Benz Vito 1996',
-          sellerId: 2,
-          bodyType: 'Автобус',
-          price: '250000',
-          manufacturer: 'Mercedes-Benz',
-          vinCode: '2463735fgv',
-          priceCurrency: '₴',
-          wasInAccident: 'Yes',
-          isTrade: 'Yes',
-          isAvailable: 'Yes',
-          mileage: '999000',
-          technicalCondition: 'Bad'
-        }
-      ]
-
     };
   },
   watch: {
@@ -313,9 +217,6 @@ export default {
     ...mapState('car', {
       cars: state => state.cars,
     }),
-    constants() {
-      return constants
-    },
     updateUser() {
       this.onUpdateUser(this.user);
     },

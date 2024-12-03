@@ -10,6 +10,7 @@ export const user = {
 
     state: {
         avatarUrl: userAvatar,
+        phone: '' || undefined,
         user: {
             id: userData.id || undefined,
             name: userData.name || undefined,
@@ -21,14 +22,15 @@ export const user = {
             age: userData.age || undefined,
             gender: userData.gender,
             additionalInfo: userData.additionalInfo || undefined,
+            usersCars: {}
         }
     },
     getters: {
         isLoggedIn: state => state.user.id !== undefined,
         getAvatarUrl: (state) => (state.avatarUrl === DEFAULT_PROFILE_IMG || state.avatarUrl === DEFAULT_PROFILE_WOMAN_IMG)
             ? ((state.user.gender === "F") ? DEFAULT_PROFILE_WOMAN_IMG : DEFAULT_PROFILE_IMG) : state.avatarUrl,
-        getUserEmail: (state) => state.user.email,
         getUserFullName: (state) => state.user.surname + " " + state.user.name,
+        getPhone: (state) => state.phone,
     },
     mutations: {
         setUserData(state, user) {
@@ -38,6 +40,15 @@ export const user = {
             } else {
                 state.user = user;
                 localStorage.setItem('user', user);
+            }
+        },
+        setPhoneNumber(state, phone) {
+            if (!phone) {
+                state.phone = {};
+                localStorage.removeItem('phone');
+            } else {
+                state.phone = phone;
+                localStorage.setItem('phone', phone);
             }
         },
         setAvatarUrl(state, url) {
@@ -53,18 +64,31 @@ export const user = {
         setUser({commit}, user) {
             commit('user/setUserData', user, {root: true});
         },
+        setPhone({commit}, phone) {
+            commit('user/setPhoneNumber', phone, {root: true});
+        },
         setAvatar({commit}, avatar) {
             commit('user/setAvatarUrl', avatar, {root: true});
-        },
-        setInvitations({commit}, invite) {
-            commit('user/setInvitationsData', invite, {root: true});
         },
         async onGetUser() {
             await this.dispatch('loading/setLoading', true);
             AccountApi.getAccountData()
                 .then(async (res) => {
-                    console.log(res.data)
+                    console.log(res)
                     await this.dispatch('user/setUser', res.data);
+                })
+                .catch(async (err) => {
+                    await this.dispatch('reports/showErrors', err);
+                })
+                .finally(async () => {
+                    await this.dispatch('loading/setLoading', false);
+                });
+        },
+        async onGetPhoneNumber({commit}, {userId}) {
+            await this.dispatch('loading/setLoading', true);
+            AccountApi.getPhone({userId})
+                .then(async (res) => {
+                    await this.dispatch('user/setPhone', res.data.phoneNumber);
                 })
                 .catch(async (err) => {
                     await this.dispatch('reports/showErrors', err);

@@ -1,8 +1,16 @@
 {
   "ui": {
     "save": "Save",
+    "add": "Add new car",
     "exit": "Exit",
+    "goBack": "Go back",
     "search": "Search"
+  },
+  "not_found": {
+    "thought": "Page is not found",
+    "not_found": "The page can't be found...",
+    "take_back": "But we can take you to home :)",
+    "link": "Return!"
   },
   "profile": {
     "name": "Name",
@@ -19,15 +27,27 @@
     "cars": "My cars"
   },
   "car": {
+    "cars": "Cars found",
+    "noCars": "You haven't added any cars",
+    "myCars": "My cars",
     "type": "Car type",
     "manufacturer": "Manufacturer",
     "technicalCondition": "Technical condition",
     "vinCode": "Vin code",
     "mileage": "Mileage",
-    "price": "Price",
+    "mileageFrom": "Mileage from",
+    "mileageTo": "Mileage to",
+    "priceFrom": "Price from",
+    "priceTo": "Price to",
     "currency": "Currency",
     "accident": "Car was in accident",
     "available": "Car is available",
-    "trade": "Trade available"
+    "trade": "Trade available",
+    "noFound": "No cars found based on your search",
+    "buyNow": "Buy now",
+    "views": "Views",
+    "owner": {
+      "info": "Car owner personal info"
+    }
   }
 }

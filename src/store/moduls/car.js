@@ -1,7 +1,10 @@
 import {CarApi} from "../../api/api";
 import {DEFAULT_CAR_IMG} from "../../utils/constants";
+import router from "@/router/index.js";
+import {decryptData, encryptData} from "@/utils/encryption.js";
 
-const carData = localStorage.getItem('car') || {};
+const carData = decryptData(localStorage.getItem('car')) || {};
+const views = decryptData(localStorage.getItem('views')) || {};
 const carPhoto = localStorage.getItem('photo') || DEFAULT_CAR_IMG;
 
 export const car = {
@@ -9,8 +12,11 @@ export const car = {
 
     state: {
         photoUrl: carPhoto,
+        views: views || 0,
         car: {
+            owner: {} || undefined,
             id: carData.id || undefined,
+            mainImageURL: carData.mainImageURL || DEFAULT_CAR_IMG,
             displayName: carData.displayName || undefined,
             sellerId: carData.sellerId || undefined,
             bodyType: carData.bodyType || undefined,
@@ -27,6 +33,7 @@ export const car = {
         cars: {}
     },
     getters: {
+        getViews: state => state.views,
     },
     mutations: {
         setCarData(state, car) {
@@ -35,7 +42,7 @@ export const car = {
                 localStorage.removeItem('car');
             } else {
                 state.car = car;
-                localStorage.setItem('car', car);
+                localStorage.setItem('car', encryptData(car));
             }
         },
         setCarsData(state, cars) {
@@ -44,7 +51,7 @@ export const car = {
                 localStorage.removeItem('cars');
             } else {
                 state.cars = cars;
-                localStorage.setItem('cars', cars);
+                localStorage.setItem('cars', encryptData(cars));
             }
         },
         setPhotoUrl(state, url) {
@@ -55,23 +62,91 @@ export const car = {
                 localStorage.removeItem('photo');
             }
         },
+        setCarViews(state, views) {
+            state.views = views;
+            localStorage.setItem('views', views);
+        },
     },
     actions: {
         setCar({commit}, car) {
             commit('car/setCarData', car, {root: true});
         },
         setCars({commit}, cars) {
-            commit('car/setCarData', cars, {root: true});
+            commit('car/setCarsData', cars, {root: true});
         },
         setPhoto({commit}, photo) {
             commit('car/setPhotoUrl', photo, {root: true});
         },
-        async onGetCars() {
+        setViews({commit}, views) {
+            commit('car/setCarViews', views, {root: true});
+        },
+        async onGetCarById({commit}, {car_id}) {
+            try {
+                await this.dispatch('loading/setLoading', true);
+
+                // Виконуємо обидва запити паралельно
+                const [carDataResponse, carViewsResponse] = await Promise.all([
+                    CarApi.getCarDataById({car_id}),
+                    CarApi.getCarViews({car_id})
+                ]);
+
+                // Зберігаємо дані авто
+                localStorage.setItem('carId', JSON.stringify(carDataResponse.data.id));
+                localStorage.setItem('car', JSON.stringify(carDataResponse.data));
+                await this.dispatch('car/setCar', carDataResponse.data);
+
+                // Зберігаємо кількість переглядів авто
+                localStorage.setItem('carViews', JSON.stringify(carViewsResponse.data.watchAmount));
+                await this.dispatch('car/setViews', carViewsResponse.data.watchAmount);
+
+                // Перенаправлення на сторінку авто
+                await router.push({path: `/car/${car_id}`});
+            } catch (err) {
+                // Виведення помилок
+                await this.dispatch('reports/showErrors', err);
+            } finally {
+                // Завершення стану завантаження
+                await this.dispatch('loading/setLoading', false);
+            }
+        },
+        async onGetCarViews({commit}, {car_id}) {
             await this.dispatch('loading/setLoading', true);
-            CarApi.cars()
+            CarApi.getCarViews({car_id})
                 .then(async (res) => {
-                    localStorage.setItem('cars', JSON.stringify(res.data.cars));
-                    await this.dispatch('car/setCars', res.data);
+                    console.log(res)
+                    // localStorage.setItem('carViews', JSON.stringify(res.data.id));
+                    // await this.dispatch('car/setViews', res.data.views);
+                })
+                .catch(async (err) => {
+                    await this.dispatch('reports/showErrors', err);
+                })
+                .finally(async () => {
+                    // Перенаправлення на сторінку з характеристиками авто
+                    await router.push({path: `/car/${car_id}`});
+                    await this.dispatch('loading/setLoading', false);
+                });
+        },
+        async onSearchCars({commit}, {
+            manufacturer,
+            bodyType,
+            priceFrom,
+            priceTo,
+            mileageFrom,
+            mileageTo,
+            displayName,
+            page,
+            size
+        }) {
+            await this.dispatch('loading/setLoading', true);
+
+            // Перенаправлення на сторінку з авто перед виконанням пошуку
+            await router.push('/car');
+
+            CarApi.cars({manufacturer, bodyType, priceFrom, priceTo, mileageFrom, mileageTo, displayName, page, size})
+                .then(async (res) => {
+                    const isLastPage = res.data.totalPages - res.data.pageNumber === 1;
+                    await this.dispatch('car/setCars', res.data.carShortResponses);
+                    await this.dispatch('car/setNext', isLastPage);
                 })
                 .catch(async (err) => {
                     await this.dispatch('reports/showErrors', err);
@@ -80,21 +155,20 @@ export const car = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onGetCarById(car_id) {
-            await this.dispatch('loading/setLoading', true);
-            CarApi.getCarDataById(car_id)
-                .then(async (res) => {
-                    localStorage.setItem('car', JSON.stringify(res.data.car));
-                    await this.dispatch('car/setCar', res.data);
-                })
-                .catch(async (err) => {
-                    await this.dispatch('reports/showErrors', err);
-                })
-                .finally(async () => {
-                    await this.dispatch('loading/setLoading', false);
-                });
-        },
-        async onCreateCar({commit}, {displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition}) {
+        async onCreateCar({commit}, {
+            displayName,
+            sellerId,
+            bodyType,
+            price,
+            manufacturer,
+            vinCode,
+            priceCurrency,
+            wasInAccident,
+            isTrade,
+            isAvailable,
+            mileage,
+            technicalCondition
+        }) {
             await this.dispatch('loading/setLoading', true);
             CarApi
                 .createCar(displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition)
@@ -138,7 +212,20 @@ export const car = {
                     await this.dispatch('loading/setLoading', false);
                 });
         },
-        async onUpdateCar({commit}, {displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition}) {
+        async onUpdateCar({commit}, {
+            displayName,
+            sellerId,
+            bodyType,
+            price,
+            manufacturer,
+            vinCode,
+            priceCurrency,
+            wasInAccident,
+            isTrade,
+            isAvailable,
+            mileage,
+            technicalCondition
+        }) {
             await this.dispatch('loading/setLoading', true);
             CarApi
                 .updateCarData(displayName, sellerId, bodyType, price, manufacturer, vinCode, priceCurrency, wasInAccident, isTrade, isAvailable, mileage, technicalCondition)

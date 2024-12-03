@@ -11,90 +11,90 @@ export const GENDERS = [
 
 export const TYPES = [
     {
-        id: '0',
+        id: 'Sedan',
         name: 'Sedan',
     },
     {
-        id: '1',
+        id: 'Hatchback',
         name: 'Hatchback',
     },
     {
-        id: '2',
+        id: 'Pickup',
         name: 'Pickup',
     },
     {
-        id: '3',
+        id: 'Minivan',
         name: 'Minivan',
     },
     {
-        id: '4',
+        id: 'Crossover',
         name: 'Crossover',
     },
     {
-        id: '5',
+        id: 'SUV',
         name: 'SUV',
     },
     {
-        id: '6',
+        id: 'Van',
         name: 'Van',
     },
     {
-        id: '7',
+        id: 'MPV',
         name: 'MPV',
     },
 ];
 
 export const MANUFACTURERS = [
     {
-        id: '0',
+        id: 'Skoda',
         name: 'Skoda',
     },
     {
-        id: '1',
+        id: 'Honda',
         name: 'Honda',
     },
     {
-        id: '2',
+        id: 'BMW',
         name: 'BMW',
     },
     {
-        id: '3',
+        id: 'Fiat',
         name: 'Fiat',
     },
     {
-        id: '4',
+        id: 'Renault',
         name: 'Renault',
     },
     {
-        id: '5',
+        id: 'Toyota',
         name: 'Toyota',
     },
     {
-        id: '6',
+        id: 'Volkswagen',
         name: 'Volkswagen',
     },
     {
-        id: '7',
+        id: 'Hyundai',
         name: 'Hyundai',
     },
     {
-        id: '8',
+        id: 'Lexus',
         name: 'Lexus',
     },
     {
-        id: '9',
+        id: 'Nissan',
         name: 'Nissan',
     },
     {
-        id: '10',
+        id: 'Kia',
         name: 'Kia',
     },
     {
-        id: '11',
+        id: 'Porsche',
         name: 'Porsche',
     },
     {
-        id: '12',
+        id: 'Mercedes-Benz',
         name: 'Mercedes-Benz',
     },
 ];
@@ -117,46 +117,18 @@ export const CONDITIONS = [
         name: 'Not running',
     },
 ]
-
-export const MILEAGE = [
-    {
-        id: '0',
-        name: '0-10000',
-    },
-    {
-        id: '1',
-        name: '10000-50000',
-    },
-    {
-        id: '2',
-        name: '50000-100000',
-    },
-    {
-        id: '3',
-        name: '100000-200000',
-    },
-    {
-        id: '4',
-        name: '200000-500000',
-    },
-    {
-        id: '5',
-        name: '500000+',
-    }
-]
-
 export const CURRENCIES = [
     {
-        id: '0',
-        name: 'USD',
+        id: 'USD',
+        name: '$',
     },
     {
-        id: '1',
-        name: 'UAH',
+        id: 'UAH',
+        name: '₴',
     },
     {
-        id: '2',
-        name: 'EUR',
+        id: 'EUR',
+        name: '€',
     }
 ]
 

@@ -220,22 +220,23 @@ const router = createRouter({
 });
 
 const isLoggedIn = () => !!localStorage.getItem('token');
+export let previousRoute = null;
 
 router.beforeEach((to, from, next) => {
-    document.title = to.meta.title;
+    // Зберігаємо попередній маршрут, якщо він існує
+    if (from.name) {
+        previousRoute = from.fullPath;
+    }
 
+    // Встановлення заголовків сторінки
+    document.title = to.meta.title || 'Default Title';
     Array.from(document.querySelectorAll('[data-vue-router-controlled]'))
         .map(el => el.parentNode.removeChild(el));
 
-    to.meta.metaTags.map(tagDef => {
+    to.meta.metaTags?.map(tagDef => {
         const tag = document.createElement('meta');
-
-        Object.keys(tagDef).forEach(key => {
-            tag.setAttribute(key, tagDef[key]);
-        });
-
+        Object.keys(tagDef).forEach(key => tag.setAttribute(key, tagDef[key]));
         tag.setAttribute('data-vue-router-controlled', '');
-
         return tag;
     }).forEach(tag => document.head.appendChild(tag));
 

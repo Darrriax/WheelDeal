@@ -94,21 +94,21 @@ export const car = {
         .finally(async () => {
           // Перенаправлення на сторінку з характеристиками авто
           await router.push({ path: `/car/${car_id}` });
-          // CarApi.getCarViews({car_id})
-          //     .then(async (res) => {
-          //         console.log(res)
-          //         // localStorage.setItem('carViews', JSON.stringify(res.data.id));
-          //         // await this.dispatch('car/setViews', res.data.views);
-          //     })
-          //     .catch(async (err) => {
-          //         await this.dispatch('reports/showErrors', err);
-          //     })
-          //     .finally(async () => {
-          //         // Перенаправлення на сторінку з характеристиками авто
-          //         await router.push({path: `/car/${car_id}`});
-          //         await this.dispatch('loading/setLoading', false);
-          //     });
-          await this.dispatch("loading/setLoading", false);
+          // CarApi.getCarViews({ car_id })
+          //   .then(async (res) => {
+          //     console.log(res);
+          //     localStorage.setItem("carViews", JSON.stringify(res.data.id));
+          //     await this.dispatch("car/setViews", res.data.views);
+          //   })
+          //   .catch(async (err) => {
+          //     await this.dispatch("reports/showErrors", err);
+          //   })
+          //   .finally(async () => {
+          //     // Перенаправлення на сторінку з характеристиками авто
+          //     await router.push({ path: `/car/${car_id}` });
+          //     await this.dispatch("loading/setLoading", false);
+          //   });
+          // await this.dispatch("loading/setLoading", false);
         });
     },
     async onGetCarViews({ commit }, { carId }) {

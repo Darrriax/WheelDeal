@@ -1,8 +1,9 @@
 import {AccountApi, setToken} from "../../api/api";
 import {DEFAULT_PROFILE_IMG, DEFAULT_PROFILE_WOMAN_IMG} from "../../utils/constants";
 import logger from "@fortawesome/vue-fontawesome/src/logger.js";
+import {decryptData, encryptData} from "@/utils/encryption.js";
 
-const userData = localStorage.getItem('user') || {};
+const userData = decryptData(localStorage.getItem('user')) || {};
 const userAvatar = localStorage.getItem('avatar') || DEFAULT_PROFILE_IMG;
 
 export const user = {
@@ -39,7 +40,7 @@ export const user = {
                 localStorage.removeItem('user');
             } else {
                 state.user = user;
-                localStorage.setItem('user', user);
+                localStorage.setItem('user', encryptData(user));
             }
         },
         setPhoneNumber(state, phone) {
@@ -48,7 +49,7 @@ export const user = {
                 localStorage.removeItem('phone');
             } else {
                 state.phone = phone;
-                localStorage.setItem('phone', phone);
+                localStorage.setItem('phone', encryptData(phone));
             }
         },
         setAvatarUrl(state, url) {

@@ -56,7 +56,7 @@
               <font-awesome-icon icon="fa-solid fa-eye"/>
               {{ $t('car.views') }}: {{getViews}}
             </div>
-            <button-blue :label="$t('car.buyNow')" @click="buyNow(car.owner.id)" />
+            <button-blue :label="$t('car.buyNow')" @click="getCar(car.id)" />
             <h4 v-if="showPhone" class="text-center pt-3">{{ getPhone }}</h4>
           </div>
         </div>
@@ -122,6 +122,7 @@ export default {
   methods: {
     ...mapActions('car', {
       onGetCarById: 'onGetCarById',
+      onGetCarViews: 'onGetCarViews'
     }),
     ...mapActions('user', {
       onGetPhoneNumber: 'onGetPhoneNumber',
@@ -138,6 +139,9 @@ export default {
     buyNow(ownerId) {
       this.showPhone = !this.showPhone;
       this.onGetPhoneNumber({userId: ownerId});
+    },
+    getCar(carId) {
+      this.onGetCarViews({carId: carId});
     }
   },
 }

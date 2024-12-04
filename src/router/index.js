@@ -243,22 +243,22 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
-// router.beforeEach((to, from, next) => {
-//     if (to.fullPath === '/policy') {
-//         next()
-//     } else if (to.matched.some(route => route.meta.requiresAuth)) {
-//         if (!isLoggedIn()) {
-//             next('/login');
-//         } else {
-//             next();
-//         }
-//     } else {
-//         if (!isLoggedIn()) {
-//             next();
-//         } else {
-//             next('/profile');
-//         }
-//     }
-// });
+router.beforeEach((to, from, next) => {
+    if (to.fullPath === '/policy') {
+        next()
+    } else if (to.matched.some(route => route.meta.requiresAuth)) {
+        if (!isLoggedIn()) {
+            next('/login');
+        } else {
+            next();
+        }
+    } else {
+        if (!isLoggedIn()) {
+            next();
+        } else {
+            next('/profile');
+        }
+    }
+});
 
 export default router;

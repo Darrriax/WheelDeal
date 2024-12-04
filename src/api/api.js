@@ -25,7 +25,7 @@ const urls = {
     car: {
         cars: 'cars',
         search: 'cars/search',
-        views: 'admin/car-views'
+        views: 'admin/car-view'
     },
     photo: {
         photos: 'api/photos',
@@ -71,11 +71,6 @@ DefaultApiInstance.interceptors.request.use(function (config) {
 });
 
 KafkaApiInstance.interceptors.request.use(function (config) {
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    } else {
-        config.headers.Authorization = `Bearer ${tokenData}`;
-    }
     return config;
 });
 
@@ -224,8 +219,8 @@ export const CarApi = {
         return FormDataApiInstance.post(url, data);
     },
     //Отримати кількість переглядів
-    getCarViews(car_id) {
-        const url = `${urls.car.views}/${car_id}`;
+    getCarViews({carId}) {
+        const url = `${urls.car.views}/${carId}`;
         return KafkaApiInstance.get(url);
     }
 }

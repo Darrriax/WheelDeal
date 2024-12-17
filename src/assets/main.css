@@ -594,14 +594,15 @@ form img {
 
 /* avatar */
 .avatar-container {
-    max-width: 130px;
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -150px);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    max-width: 120px;
+    min-width: 120px;
 }
 
 .white_card .avatar {
@@ -619,10 +620,8 @@ form img {
     border-radius: 50%;
     object-fit: cover;
     transition: 0.1s;
-}
-
-.avatar-image-mini {
-    width: 45px;
+    border: 5px solid var(--main-background-color);
+    position: relative;
 }
 
 .avatar-overlay {
@@ -630,7 +629,7 @@ form img {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #8c8c8c94;
+    background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     aspect-ratio: 1;
     height: 100%;
@@ -653,13 +652,51 @@ form img {
     font-size: 20px;
 }
 
+/* Загальний стиль кнопки */
+.delete-button {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: rgba(255, 0, 0, 0.64);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.delete-button:hover {
+    background: darkred;
+}
+
+/* Позиціонування кнопки для банера */
+.deleteBackground {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Позиціонування кнопки для аватарки */
+.avatar-photo {
+    position: relative; /* Для прив'язки кнопки до контейнера */
+}
+
+.deleteAvatar {
+    position: absolute;
+    transform: translate(170%, -400%);
+}
+
+
 .title-text {
     font-weight: bolder;
     font-size: 20px;
     position: relative;
     z-index: 100;
-    transform: translate(0%, -300%);
-    height: 10px;
+    transform: translate(0%, -250%);
+    height: 15px;
+    width: 100%;
     margin-bottom: 0;
     text-align: center;
 }

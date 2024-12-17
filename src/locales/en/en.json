@@ -24,7 +24,10 @@
     "title": "My personal information",
     "connect": "Save",
     "additionalInfo": "Additional information",
-    "cars": "My cars"
+    "cars": "My cars",
+    "bannerUpdateError": "Failed to update the banner image. Please try again.",
+    "avatarUpdateError": "Failed to update the user avatar image. Please try again.",
+    "supportedFormats": "Supported image formats: JPG, JPEG, PNG."
   },
   "car": {
     "cars": "Cars found",

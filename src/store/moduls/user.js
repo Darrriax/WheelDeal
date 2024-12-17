@@ -1,16 +1,17 @@
 import {AccountApi, setToken} from "../../api/api";
-import {DEFAULT_PROFILE_IMG, DEFAULT_PROFILE_WOMAN_IMG} from "../../utils/constants";
-import logger from "@fortawesome/vue-fontawesome/src/logger.js";
+import {DEFAULT_PROFILE_BACKGROUND, DEFAULT_PROFILE_IMG, DEFAULT_PROFILE_WOMAN_IMG} from "../../utils/constants";
 import {decryptData, encryptData} from "@/utils/encryption.js";
 
 const userData = decryptData(localStorage.getItem('user')) || {};
-const userAvatar = localStorage.getItem('avatar') || DEFAULT_PROFILE_IMG;
+const userAvatar = decryptData(localStorage.getItem('avatar')) || DEFAULT_PROFILE_IMG;
+const userBackground = decryptData(localStorage.getItem('background')) || DEFAULT_PROFILE_BACKGROUND;
 
 export const user = {
     namespaced: true,
 
     state: {
         avatarUrl: userAvatar,
+        avatarBackground: userBackground,
         phone: '' || undefined,
         user: {
             id: userData.id || undefined,
@@ -30,6 +31,7 @@ export const user = {
         isLoggedIn: state => state.user.id !== undefined,
         getAvatarUrl: (state) => (state.avatarUrl === DEFAULT_PROFILE_IMG || state.avatarUrl === DEFAULT_PROFILE_WOMAN_IMG)
             ? ((state.user.gender === "F") ? DEFAULT_PROFILE_WOMAN_IMG : DEFAULT_PROFILE_IMG) : state.avatarUrl,
+        getAvatarBackground: (state) => state.avatarBackground,
         getUserFullName: (state) => state.user.surname + " " + state.user.name,
         getPhone: (state) => state.phone,
     },
@@ -55,9 +57,17 @@ export const user = {
         setAvatarUrl(state, url) {
             state.avatarUrl = url;
             if (url) {
-                localStorage.setItem('avatar', url);
+                localStorage.setItem('avatar', encryptData(url));
             } else {
                 localStorage.removeItem('avatar');
+            }
+        },
+        setAvatarBackground(state, url) {
+            state.avatarBackground = url;
+            if (url) {
+                localStorage.setItem('background', encryptData(url));
+            } else {
+                localStorage.removeItem('background');
             }
         },
     },
@@ -70,6 +80,9 @@ export const user = {
         },
         setAvatar({commit}, avatar) {
             commit('user/setAvatarUrl', avatar, {root: true});
+        },
+        setBanner({commit}, image) {
+            commit('user/setAvatarBackground', image, {root: true});
         },
         async onGetUser() {
             await this.dispatch('loading/setLoading', true);
@@ -137,7 +150,106 @@ export const user = {
             } else {
                 await this.dispatch('user/setAvatar', DEFAULT_PROFILE_IMG);
             }
+        },
 
+        async onUpdateAvatar({commit}, imageFile) {
+            await this.dispatch('loading/setLoading', true);
+            try {
+                const res = await AccountApi.updateAvatar(imageFile); // Очікуємо результат API
+                await this.dispatch('reports/showSuccess', res); // Показуємо успіх
+                return res; // Повертаємо результат для подальшого використання
+            } catch (err) {
+                console.log(err);
+                await this.dispatch('reports/showErrors', err); // Обробка помилки
+                throw err; // Кидаємо помилку далі
+            } finally {
+                await this.dispatch('loading/setLoading', false); // Вимикаємо завантаження
+            }
+        },
+
+        async onGetAvatar({commit}, userId) {
+            await this.dispatch('loading/setLoading', true);
+            AccountApi
+                .getAvatar(userId)
+                .then(async (res) => {
+                    console.log(res.data);
+                    const avatarBase64 = res.data;
+                    const imageType = res.data.imageType || 'jpeg'; // Тип зображення з відповіді або значення за замовчуванням
+                    const avatarUrl = `data:image/${imageType.toLowerCase()};base64,${avatarBase64}` || DEFAULT_PROFILE_BACKGROUND;
+                    await this.dispatch('user/setAvatar', avatarUrl);
+                })
+                .catch(async (err) => {
+                    await this.dispatch('reports/showErrors', err);
+                })
+                .finally(async () => {
+                    await this.dispatch('loading/setLoading', false);
+                });
+        },
+
+        async onDeleteAvatar({commit}) {
+            await this.dispatch('loading/setLoading', true);
+            AccountApi
+                .deleteAvatar()
+                .then(async (res) => {
+                    await this.dispatch('user/setAvatar', null);
+                    await this.dispatch('reports/showSuccess', res);
+                })
+                .catch(async (err) => {
+                    await this.dispatch('reports/showErrors', err);
+                })
+                .finally(async () => {
+                    await this.dispatch('loading/setLoading', false);
+                });
+        },
+
+        async onUpdateBanner({commit}, imageFile) {
+            await this.dispatch('loading/setLoading', true);
+            try {
+                const res = await AccountApi.updateBanner(imageFile); // Очікуємо результат API
+                await this.dispatch('reports/showSuccess', res); // Показуємо успіх
+                return res; // Повертаємо результат для подальшого використання
+            } catch (err) {
+                console.log(err);
+                await this.dispatch('reports/showErrors', err); // Обробка помилки
+                throw err; // Кидаємо помилку далі
+            } finally {
+                await this.dispatch('loading/setLoading', false); // Вимикаємо завантаження
+            }
+        },
+
+        async onGetBanner({commit}, userId) {
+            await this.dispatch('loading/setLoading', true);
+            AccountApi
+                .getBanner(userId)
+                .then(async (res) => {
+                    console.log(res);
+                    const bannerBase64 = res.data.base64Image;
+                    const imageType = res.data.imageType || 'jpeg'; // Тип зображення з відповіді або значення за замовчуванням
+                    const bannerUrl = `data:image/${imageType.toLowerCase()};base64,${bannerBase64}` || DEFAULT_PROFILE_BACKGROUND;
+                    await this.dispatch('user/setBanner', bannerUrl);
+                })
+                .catch(async (err) => {
+                    await this.dispatch('reports/showErrors', err);
+                })
+                .finally(async () => {
+                    await this.dispatch('loading/setLoading', false);
+                });
+        },
+
+        async onDeleteBanner({commit}) {
+            await this.dispatch('loading/setLoading', true);
+            AccountApi
+                .deleteBanner()
+                .then(async (res) => {
+                    await this.dispatch('user/setBanner', null);
+                    await this.dispatch('reports/showSuccess', res);
+                })
+                .catch(async (err) => {
+                    await this.dispatch('reports/showErrors', err);
+                })
+                .finally(async () => {
+                    await this.dispatch('loading/setLoading', false);
+                });
         },
     },
 };

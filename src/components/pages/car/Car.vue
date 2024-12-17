@@ -24,7 +24,7 @@
         <div
           class="white_card pt-3 no-border-right col-lg-9 col-md-12 car-images-carousel"
         >
-          <carousel :items="car.images.imagesUrl" />
+          <carousel :items="car.images?.imagesUrl" />
         </div>
 
         <div
@@ -168,9 +168,9 @@ export default {
       this.showPhone = !this.showPhone;
       this.onGetPhoneNumber({ userId: ownerId });
     },
-    getCar(carId) {
-      this.onGetCarViews({ carId: carId });
-    },
+  },
+  created() {
+    this.onGetCarViews({ carId: this.car.id })
   },
 };
 </script>

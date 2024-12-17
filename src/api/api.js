@@ -28,7 +28,14 @@ const urls = {
         views: 'admin/car-view'
     },
     photo: {
-        photos: 'api/photos',
+        get: 'user-images',
+        update: 'user-images/upload',
+        delete: 'user-images/delete',
+    },
+    banner: {
+        get: 'user-banners',
+        update: 'user-banners/upload',
+        delete: 'user-banners/delete',
     }
 };
 
@@ -42,13 +49,17 @@ const defaultConfig = {
 
 const defaultKafkaConfig = {
     baseURL: import.meta.env.VITE_APP_KAFKA_URL,
+};
+
+const formDataConfig = {
+    baseURL: import.meta.env.VITE_APP_BASE_URL,
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         'Access-Control-Allow-Origin': '*',
     }
 };
 
-const formDataConfig = {
+const imageDataConfig = {
     baseURL: import.meta.env.VITE_APP_BASE_URL,
     headers: {
         'Content-Type': 'multipart/form-data',
@@ -60,6 +71,7 @@ export const DefaultApiInstance = axios.create(defaultConfig);
 export const KafkaApiInstance = axios.create(defaultKafkaConfig);
 
 export const FormDataApiInstance = axios.create(formDataConfig);
+export const ImageDataApiInstance = axios.create(imageDataConfig);
 
 DefaultApiInstance.interceptors.request.use(function (config) {
     if (token) {
@@ -79,6 +91,27 @@ FormDataApiInstance.interceptors.request.use(function (config) {
         config.headers.Authorization = `Bearer ${token}`;
     } else {
         config.headers.Authorization = `Bearer ${tokenData}`;
+    }
+    return config;
+});
+
+ImageDataApiInstance.interceptors.request.use(function (config) {
+    // Додаємо Authorization
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        config.headers.Authorization = `Bearer ${tokenData}`;
+    }
+
+    // Перевіряємо, чи є у FormData файл для додавання Image-Type
+    if (config.data instanceof FormData) {
+        const file = config.data.get("imageFile")
+        if (file) {
+            const fileType = file.type; // отримуємо MIME-тип з файлу
+            if (fileType) {
+                config.headers["Image-Type"] = fileType; // додаємо у хедери
+            }
+        }
     }
     return config;
 });
@@ -112,6 +145,46 @@ export const AccountApi = {
         const url = urls.account.profile;
         return DefaultApiInstance.get(url);
     },
+
+    updateAvatar(imageFile) {
+        const url = urls.photo.update;
+        return ImageDataApiInstance.post(url, imageFile);
+    },
+
+    getAvatar(userId) {
+        const url = `${urls.photo.get}/${userId}/profile-picture`;
+        return DefaultApiInstance.get(url);
+    },
+
+    deleteAvatar() {
+        const url = urls.photo.delete;
+        return DefaultApiInstance.delete(url);
+    },
+
+    updateBanner(imageFile) {
+        const url = urls.banner.update;
+        return ImageDataApiInstance.post(url, imageFile);
+    },
+
+    async getBanner(userId) {
+        const avatarElement = document.querySelector('.avatar.p-t-20');
+        let elementWidth = avatarElement?.getBoundingClientRect().width;
+        let elementHeight = avatarElement?.getBoundingClientRect().height;
+
+        if (!elementWidth) {
+            console.warn("Element not found, falling back to window width and height.");
+            elementWidth = window.innerWidth;
+            elementHeight = window.innerHeight;
+        }
+        const url = `/user-banners/${userId}/profile-banner?width=${Math.round(elementWidth)}&height=${Math.round(elementHeight)}`;
+        return DefaultApiInstance.get(url);
+    },
+
+    deleteBanner() {
+        const url = urls.banner.delete;
+        return DefaultApiInstance.delete(url);
+    },
+
     // Тут оновлюємо суто дані користувача, якщо він щось не так ввів
     updateData(name, surname, fatherName, password, phoneNumber, age, gender, additionalInfo) {
         const url = urls.account.profile;

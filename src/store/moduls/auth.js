@@ -3,8 +3,9 @@ import router from "../../router";
 import { resetTheme } from "../../mixins/setTheme";
 import { resetLang } from "../..//mixins/setLang.js";
 import {
-  DEFAULT_PROFILE_IMG,
-  DEFAULT_PROFILE_WOMAN_IMG,
+    DEFAULT_PROFILE_BACKGROUND,
+    DEFAULT_PROFILE_IMG,
+    DEFAULT_PROFILE_WOMAN_IMG,
 } from "../../utils/constants.js";
 
 const tokenData = localStorage.getItem("token") || null;
@@ -43,29 +44,46 @@ export const auth = {
         .then(async () => {
           AccountApi.getAccountData()
             .then(async (res) => {
-              await this.dispatch("user/setUser", res.data);
-              if (this.getters["user/isLoggedIn"]) {
-                if (
-                  router.currentRoute.value.query.redirect === "/profile" ||
-                  !router.currentRoute.value.query.redirect
-                ) {
-                  await router.push("/profile");
-                } else if (router.currentRoute.value.query.redirect) {
-                  await router.push(
-                    router.currentRoute.value.query.redirect.toString()
-                  );
+                // Отримуємо аватарку
+                await AccountApi.getAvatar(res.data.id)
+                    .then(async (avatarRes) => {
+                        const avatarBase64 = avatarRes.data;
+                        const avatarUrl = `data:image/jpeg;base64,${avatarBase64}` ||
+                            (res.data.gender === "Female" ? DEFAULT_PROFILE_WOMAN_IMG : DEFAULT_PROFILE_IMG);
+                        await this.dispatch('user/setAvatar', avatarUrl);
+                    })
+                    .catch(async (avatarErr) => {
+                        console.error("Error fetching avatar:", avatarErr);
+                        const fallbackAvatar = res.data.gender === "Female" ? DEFAULT_PROFILE_WOMAN_IMG : DEFAULT_PROFILE_IMG;
+                        await this.dispatch('user/setAvatar', fallbackAvatar);
+                    });
+                // Отримуємо банер
+                await AccountApi.getBanner(res.data.id)
+                    .then(async (bannerRes) => {
+                        const bannerBase64 = bannerRes.data;
+                        const bannerUrl = `data:image/jpeg;base64,${bannerBase64}` || DEFAULT_PROFILE_BACKGROUND;
+                        await this.dispatch('user/setBanner', bannerUrl);
+                    })
+                    .catch(async (bannerErr) => {
+                        console.error("Error fetching banner:", bannerErr);
+                        await this.dispatch('user/setBanner', DEFAULT_PROFILE_BACKGROUND);
+                    });
+
+                // Оновлюємо користувача
+                await this.dispatch("user/setUser", res.data);
+
+                // Перенаправлення користувача
+                if (this.getters["user/isLoggedIn"]) {
+                    const redirect = router.currentRoute.value.query.redirect;
+                    if (redirect === "/profile" || !redirect) {
+                        await router.push("/profile");
+                    } else if (redirect) {
+                        await router.push(redirect.toString());
+                    }
                 }
-              }
-              await this.dispatch("reports/showSuccess", res);
-              res.data.gender === "Female"
-                ? await this.dispatch(
-                    "user/setAvatar",
-                    res.data.avatar?.url || DEFAULT_PROFILE_WOMAN_IMG
-                  )
-                : await this.dispatch(
-                    "user/setAvatar",
-                    res.data.avatar?.url || DEFAULT_PROFILE_IMG
-                  );
+
+                // Відображення успішного звіту
+                await this.dispatch("reports/showSuccess", res);
             })
             .catch(async (err) => {
               await this.dispatch("reports/showErrors", err);

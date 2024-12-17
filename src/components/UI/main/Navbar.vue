@@ -4,7 +4,7 @@
       <div class="collapse navbar-collapse gap-2" id="nav">
         <div class="notification_warp displayFlex justify-content-end gap-3">
           <animated-theme-toggle v-model="selectedTheme" class="my-1"/>
-          <div class="dropdown desktop ">
+          <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown"
                     data-bs-toggle="dropdown" aria-expanded="false">
               {{ selectedLanguage }}
@@ -74,9 +74,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user', {
-      getAvatarUrl: 'getAvatarUrl',
-    }),
     ...mapState('user', {
       name: state => state.user.name,
       surname: state => state.user.surname,

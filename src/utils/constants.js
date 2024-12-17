@@ -5,6 +5,7 @@ export const MAX_IMAGE_SIZE = 10240; //kb
 export const DEFAULT_CAR_IMG = '/images/car.png';
 export const DEFAULT_PROFILE_IMG = '/images/profile_man.png';
 export const DEFAULT_PROFILE_WOMAN_IMG = '/images/profile_woman.png';
+export const DEFAULT_PROFILE_BACKGROUND = '/images/background.jpg';
 export const PDF_IMG = '/public/images/pdf.png';
 export const EXCEL_IMG = '/public/images/excel.png';
 export const WORD_IMG = '/public/images/word.png';
